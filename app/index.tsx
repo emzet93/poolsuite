@@ -10,6 +10,9 @@ export default function HomeScreen() {
       <Text color="secondary" size="xl">
         Poolsuite
       </Text>
+      <Text color="secondary" size="xl" weight="bold">
+        Poolsuite
+      </Text>
     </View>
   );
 }

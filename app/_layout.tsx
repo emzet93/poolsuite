@@ -14,6 +14,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded] = useFonts({
     Chicago: require("../assets/fonts/Chicago.ttf"),
+    ChicagoLight: require("../assets/fonts/ChicagoLight.ttf"),
   });
 
   useEffect(() => {
