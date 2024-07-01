@@ -7,12 +7,13 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text color="secondary" size="xl">
+      <Text color="secondary" size="l" weight="bold">
         Poolsuite
       </Text>
-      <Text color="secondary" size="xl" weight="bold">
+      <Text color="secondary" size="l">
         Poolsuite
       </Text>
+      <View style={{ height: 14, width: 10, backgroundColor: "pink" }} />
     </View>
   );
 }
@@ -23,5 +24,8 @@ const stylesheet = createStyleSheet((theme, runtime) => ({
     flex: 1,
     alignItems: "center",
     backgroundColor: theme.colors.primary,
+  },
+  row: {
+    flexDirection: "row",
   },
 }));

@@ -8,6 +8,7 @@ export const textSize = {
   m: 14,
   l: 18,
   xl: 24,
+  xxl: 32,
 };
 
 export const fontWeight = {
@@ -24,5 +25,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors[color],
     fontSize: textSize[size],
     fontFamily: fontWeight[weight],
+    backgroundColor: "red",
+    lineHeight: Math.round(1.2 * textSize[size]),
   }),
 }));
