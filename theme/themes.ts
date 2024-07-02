@@ -12,8 +12,8 @@ const defaultSpacing = {
 
 export const poolsuite: Theme = {
   colors: {
-    primary: "#000",
     secondary: "#FFF",
+    primary: "#000",
   },
   spacing: defaultSpacing,
 };

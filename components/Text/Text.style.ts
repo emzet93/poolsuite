@@ -25,7 +25,6 @@ export const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors[color],
     fontSize: textSize[size],
     fontFamily: fontWeight[weight],
-    backgroundColor: "red",
     lineHeight: Math.round(1.2 * textSize[size]),
   }),
 }));
