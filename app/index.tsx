@@ -7,9 +7,9 @@ export default function HomeScreen() {
   return (
     <ScreenSlider
       screens={[
-        { id: "Player", Component: Player },
-        { id: "Themes", Component: Themes },
-        { id: "About", Component: About },
+        { id: "Player", name: "Poolsuite FM", Component: Player },
+        { id: "Themes", name: "Themes", Component: Themes },
+        { id: "About", name: "About", Component: About },
       ]}
     />
   );

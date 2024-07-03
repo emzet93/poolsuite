@@ -10,14 +10,13 @@ import Animated, {
 import { useStyles, UnistylesRuntime } from "react-native-unistyles";
 
 import { PlayerBar, PlayerBarHeight } from "@/components/PlayerBar";
+import { NavigationBar } from "@/components/ScreenSlider/NavigationBar";
 
 import { stylesheet } from "./ScreenSlider.style";
+import { ScreenSlide } from "./types";
 
 interface IProps {
-  screens: {
-    id: string;
-    Component: FC;
-  }[];
+  screens: ScreenSlide[];
 }
 
 const screenWidth = UnistylesRuntime.screen.width;
@@ -47,6 +46,12 @@ export const ScreenSlider: FC<IProps> = ({ screens }) => {
 
   return (
     <View style={styles.root}>
+      <NavigationBar
+        screens={screens}
+        slideWidth={screenWidth}
+        sliderPositionX={sliderPositionX}
+      />
+
       <Animated.ScrollView
         ref={sliderRef}
         horizontal
