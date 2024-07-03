@@ -1,6 +1,8 @@
 import { createStyleSheet } from "react-native-unistyles";
 
 export const NavigationBarHeight = 36;
+export const ArrowSize = 16;
+export const ArrowOffset = ArrowSize * 2;
 
 export const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
@@ -10,8 +12,17 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
   navigationBar: {
     backgroundColor: theme.colors.primary,
     height: NavigationBarHeight,
-    alignItems: "center",
+    flexDirection: "row",
     overflow: "hidden",
+  },
+  navigationArrow: {
+    paddingHorizontal: theme.spacing.xs,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  namesContainer: {
+    flex: 1,
+    alignSelf: "stretch",
   },
   name: {
     height: NavigationBarHeight,
@@ -20,12 +31,16 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     alignItems: "center",
     gap: theme.spacing.xxs,
   },
-  progressBarContainer: {
+  progressBarWrapper: {
     backgroundColor: theme.colors.primary,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
     paddingVertical: theme.spacing.xxs / 2,
   },
   progressBar: {
-    height: 2,
+    height: theme.spacing.xxs / 2,
     backgroundColor: theme.colors.secondary,
   },
 }));

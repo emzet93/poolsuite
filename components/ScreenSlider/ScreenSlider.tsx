@@ -25,10 +25,12 @@ const bottomInset = UnistylesRuntime.insets.bottom;
 export const ScreenSlider: FC<IProps> = ({ screens }) => {
   const { styles } = useStyles(stylesheet);
 
+  const activeSlide = useSharedValue(0);
   const sliderRef = useRef<Animated.ScrollView | null>(null);
   const sliderPositionX = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler((event) => {
     sliderPositionX.value = event.contentOffset.x;
+    activeSlide.value = Math.round(sliderPositionX.value / screenWidth);
   });
 
   const playerStyle = useAnimatedStyle(() => ({
@@ -44,12 +46,20 @@ export const ScreenSlider: FC<IProps> = ({ screens }) => {
     ],
   }));
 
+  const changeSlide = (direction: number) => {
+    sliderRef.current?.scrollTo({
+      x: (activeSlide.value + direction) * screenWidth,
+    });
+  };
+
   return (
     <View style={styles.root}>
       <NavigationBar
         screens={screens}
         slideWidth={screenWidth}
         sliderPositionX={sliderPositionX}
+        goToPrevious={() => changeSlide(-1)}
+        goToNext={() => changeSlide(1)}
       />
 
       <Animated.ScrollView
