@@ -1,25 +1,44 @@
+import { Canvas, Image, useImage } from "@shopify/react-native-skia";
 import React, { FC } from "react";
 import { View } from "react-native";
-import { useStyles } from "react-native-unistyles";
+import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
+import { RetroFilter } from "@/components/RetroFilter";
 import { Text } from "@/components/Text";
 
 import { stylesheet } from "./Player.style";
 
 export const Player: FC = () => {
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
+
+  const stageWidth = UnistylesRuntime.screen.width - theme.spacing.xs * 2;
+  const stageHeight = UnistylesRuntime.screen.width;
+  const image = useImage(require("@/assets/images/poolsuite.png"));
 
   return (
     <View style={styles.container}>
       <Card
         containerStyle={styles.cameraCard}
-        style={styles.card}
+        style={styles.cameraCardContent}
         shadowSize="big"
       >
-        <Text size="l" weight="bold">
-          Poolsuite
-        </Text>
+        <Canvas
+          style={{
+            width: stageWidth,
+            height: stageHeight,
+          }}
+        >
+          <Image
+            image={image}
+            fit="cover"
+            x={0}
+            y={0}
+            width={stageWidth}
+            height={stageHeight}
+          />
+          <RetroFilter width={stageWidth} height={stageHeight} />
+        </Canvas>
       </Card>
 
       <Card

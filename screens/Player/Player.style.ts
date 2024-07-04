@@ -11,11 +11,14 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
   cameraCard: {
     flex: 1,
   },
+  cameraCardContent: {
+    flex: 1,
+    overflow: "hidden",
+  },
   playerCard: {
     flex: 1,
   },
   card: {
     flex: 1,
-    padding: theme.spacing.xs,
   },
 }));
