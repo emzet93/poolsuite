@@ -1,4 +1,4 @@
-import { Canvas, Image, useImage } from "@shopify/react-native-skia";
+import { Canvas, Image } from "@shopify/react-native-skia";
 import React, { FC } from "react";
 import { View } from "react-native";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
@@ -6,6 +6,7 @@ import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 import { Card } from "@/components/Card";
 import { RetroFilter } from "@/components/RetroFilter";
 import { Text } from "@/components/Text";
+import { useVideoFromAsset } from "@/hooks/useVideoFromAsset";
 
 import { stylesheet } from "./Player.style";
 
@@ -13,8 +14,12 @@ export const Player: FC = () => {
   const { styles, theme } = useStyles(stylesheet);
 
   const stageWidth = UnistylesRuntime.screen.width - theme.spacing.xs * 2;
-  const stageHeight = UnistylesRuntime.screen.width;
-  const image = useImage(require("@/assets/images/poolsuite.png"));
+  const stageHeight = stageWidth;
+
+  const { currentFrame } = useVideoFromAsset(
+    require("@/assets/videos/poolsuite.mp4"),
+    { paused: false, looping: true, volume: 0 },
+  );
 
   return (
     <View style={styles.container}>
@@ -30,7 +35,7 @@ export const Player: FC = () => {
           }}
         >
           <Image
-            image={image}
+            image={currentFrame}
             fit="cover"
             x={0}
             y={0}
