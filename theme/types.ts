@@ -1,4 +1,5 @@
 export interface Theme {
+  name: string;
   colors: {
     primary: string;
     secondary: string;
@@ -15,5 +16,5 @@ export interface Theme {
 }
 
 export interface AppThemes {
-  poolsuite: Theme;
+  [themeName: string]: Theme;
 }

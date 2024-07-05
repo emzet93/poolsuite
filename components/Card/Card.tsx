@@ -53,6 +53,7 @@ export const Card: FC<Props> = ({
         disabled={disabled || !onPress}
         onPressIn={() => (isPressed.value = true)}
         onPressOut={() => (isPressed.value = false)}
+        onPress={onPress}
         {...props}
         style={[
           styles.card,

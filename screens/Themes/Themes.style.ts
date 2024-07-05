@@ -1,11 +1,25 @@
 import { createStyleSheet } from "react-native-unistyles";
 
+import { PlayerBarHeight } from "@/components/PlayerBar";
+
 export const stylesheet = createStyleSheet((theme, runtime) => ({
-  container: {
-    padding: theme.spacing.xs,
-    paddingBottom: runtime.insets.bottom + theme.spacing.xs,
-    flex: 1,
+  scrollContainer: {
     backgroundColor: theme.colors.secondary,
-    gap: theme.spacing.l,
+  },
+  scrollContent: {
+    padding: theme.spacing.xs,
+    paddingBottom: theme.spacing.xs + runtime.insets.bottom + PlayerBarHeight,
+    gap: theme.spacing.xs,
+  },
+  themeCard: {
+    height: 80,
+  },
+  themeCardContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  themeName: {
+    padding: theme.spacing.xs,
   },
 }));
