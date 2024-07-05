@@ -1,11 +1,5 @@
 import React, { FC } from "react";
-import {
-  Pressable,
-  PressableProps,
-  StyleProp,
-  View,
-  ViewProps,
-} from "react-native";
+import { Pressable, PressableProps, StyleProp, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,

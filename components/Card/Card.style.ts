@@ -1,8 +1,5 @@
 import { createStyleSheet } from "react-native-unistyles";
 
-const borderRadius = 4;
-const borderWidth = 1;
-
 export const shadowSizeConfig = {
   small: 1,
   big: 3,
@@ -12,8 +9,8 @@ export const stylesheet = createStyleSheet((theme) => ({
   card: {
     backgroundColor: theme.colors.secondary,
     borderColor: theme.colors.primary,
-    borderWidth,
-    borderRadius,
+    borderWidth: theme.card.borderWidth,
+    borderRadius: theme.card.borderRadius,
   },
   card_inverted: {
     backgroundColor: theme.colors.primary,
@@ -22,7 +19,7 @@ export const stylesheet = createStyleSheet((theme) => ({
   shadow: (shadowSize: keyof typeof shadowSizeConfig) => ({
     backgroundColor: theme.colors.primary,
     position: "absolute",
-    borderRadius,
+    borderRadius: theme.card.borderRadius,
     top: 0,
     right: 0,
     bottom: 0,

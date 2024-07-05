@@ -11,15 +11,4 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     paddingBottom: theme.spacing.xs + runtime.insets.bottom + PlayerBarHeight,
     gap: theme.spacing.xs,
   },
-  themeCard: {
-    height: 80,
-  },
-  themeCardContent: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  themeName: {
-    padding: theme.spacing.xs,
-  },
 }));
