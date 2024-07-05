@@ -31,7 +31,7 @@ export const Card: FC<Props> = ({
   const isPressed = useSharedValue(false);
 
   const pressedStyle = useAnimatedStyle(() => {
-    const translation = isPressed.value ? shadowSizeConfig[shadowSize] * 2 : 0;
+    const translation = isPressed.value ? shadowSizeConfig[shadowSize] : 0;
 
     return {
       transform: [{ translateX: translation }, { translateY: translation }],
@@ -39,9 +39,20 @@ export const Card: FC<Props> = ({
   }, [shadowSize]);
 
   return (
-    <View style={containerStyle}>
+    <View style={[styles.container(shadowSize), containerStyle]}>
       <View
-        style={[styles.shadow(shadowSize), inverted && styles.shadow_inverted]}
+        style={[
+          styles.shadow,
+          styles.placeholderShadow(shadowSize),
+          inverted && styles.shadow_inverted,
+        ]}
+      />
+      <View
+        style={[
+          styles.shadow,
+          styles.offsetShadow(shadowSize),
+          inverted && styles.shadow_inverted,
+        ]}
       />
       <AnimatedPressable
         disabled={disabled || !onPress}
