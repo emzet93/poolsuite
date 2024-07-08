@@ -1,12 +1,13 @@
+import "react-native-reanimated";
+
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { StatusBar } from "react-native";
 
+import { initLibrary } from "@/store/library";
 import { setupThemes } from "@/theme";
-
-import "react-native-reanimated";
 
 setupThemes();
 
@@ -24,6 +25,10 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useEffect(() => {
+    initLibrary();
+  }, []);
 
   if (!loaded) {
     return null;

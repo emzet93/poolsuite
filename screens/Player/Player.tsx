@@ -7,6 +7,7 @@ import { Card } from "@/components/Card";
 import { RetroFilter } from "@/components/RetroFilter";
 import { Text } from "@/components/Text";
 import { useVideoFromAsset } from "@/hooks/useVideoFromAsset";
+import { usePlayerStore } from "@/store/player";
 
 import { stylesheet } from "./Player.style";
 
@@ -19,6 +20,14 @@ export const Player: FC = () => {
   const { currentFrame } = useVideoFromAsset(
     require("@/assets/videos/poolsuite.mp4"),
     { paused: false, looping: true, volume: 0 },
+  );
+
+  // const channels = useLibraryStore((state) => state.channels);
+  const queue = usePlayerStore((state) => state.queue);
+  const currentTrack = usePlayerStore(
+    (state) =>
+      state.queue &&
+      state.queue?.channel.tracks.find((track) => state.queue?.activeTrackId),
   );
 
   return (
@@ -52,8 +61,10 @@ export const Player: FC = () => {
         shadowSize="big"
       >
         <Text size="l" weight="bold">
-          Poolsuite
+          {queue?.channel?.name}
         </Text>
+
+        <Text>{currentTrack?.title}</Text>
       </Card>
     </View>
   );
