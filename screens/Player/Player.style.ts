@@ -6,7 +6,7 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     paddingBottom: runtime.insets.bottom + theme.spacing.xs,
     flex: 1,
     backgroundColor: theme.colors.secondary,
-    gap: theme.spacing.l,
+    gap: theme.spacing.xs,
   },
   cameraCard: {
     flex: 1,
@@ -18,7 +18,23 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
   playerCard: {
     flex: 1,
   },
-  card: {
+  playerCardContent: {
     flex: 1,
+    padding: theme.spacing.s,
+    alignItems: "center",
+    gap: theme.spacing.l,
+  },
+  playerInfo: {
+    alignItems: "center",
+    gap: theme.spacing.xxs,
+  },
+  playerControls: {
+    flexDirection: "row",
+  },
+  control: {
+    padding: theme.spacing.m,
+    minWidth: 80,
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));

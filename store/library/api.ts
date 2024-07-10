@@ -16,6 +16,7 @@ export const fetchChannels = async (): Promise<Channel[]> => {
     totalTracks: channel.total_tracks,
     tracks: channel.tracks_in_order.map((track: any) => ({
       id: track.soundcloud_id,
+      url: `https://api.poolsidefm.workers.dev/v2/get_sc_mp3_stream?track_id=${track.soundcloud_id}`,
       title: track.title,
       artist: track.artist,
       durationMs: track.duration_ms,

@@ -1,34 +1,42 @@
-import { Canvas, Image } from "@shopify/react-native-skia";
 import React, { FC } from "react";
-import { View } from "react-native";
-import { UnistylesRuntime, useStyles } from "react-native-unistyles";
+import { Pressable, View } from "react-native";
+import { useProgress } from "react-native-track-player";
+import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
-import { RetroFilter } from "@/components/RetroFilter";
 import { Text } from "@/components/Text";
-import { useVideoFromAsset } from "@/hooks/useVideoFromAsset";
-import { usePlayerStore } from "@/store/player";
+import { PlayerVideo } from "@/screens/Player/PlayerVideo";
+import { useLibraryStore } from "@/store/library";
+import {
+  playChannel,
+  playNext,
+  playPrevious,
+  selectActiveTrack,
+  togglePlay,
+  usePlayerStore,
+} from "@/store/player";
 
 import { stylesheet } from "./Player.style";
 
 export const Player: FC = () => {
-  const { styles, theme } = useStyles(stylesheet);
+  const { styles } = useStyles(stylesheet);
 
-  const stageWidth = UnistylesRuntime.screen.width - theme.spacing.xs * 2;
-  const stageHeight = stageWidth;
-
-  const { currentFrame } = useVideoFromAsset(
-    require("@/assets/videos/poolsuite.mp4"),
-    { paused: false, looping: true, volume: 0 },
-  );
-
-  // const channels = useLibraryStore((state) => state.channels);
+  const channels = useLibraryStore((state) => state.channels);
   const queue = usePlayerStore((state) => state.queue);
-  const currentTrack = usePlayerStore(
-    (state) =>
-      state.queue &&
-      state.queue?.channel.tracks.find((track) => state.queue?.activeTrackId),
-  );
+  const currentTrack = usePlayerStore(selectActiveTrack);
+  const isPlaying = usePlayerStore((state) => state.isPlaying);
+  const isBuffering = usePlayerStore((state) => state.isBuffering);
+
+  const progress = useProgress();
+
+  const playNextChannel = () => {
+    const activeChannelIndex = channels.findIndex(
+      (c) => c.id === queue?.channel.id,
+    );
+    const nextChannel = channels[activeChannelIndex + 1];
+
+    playChannel(nextChannel || channels[0], true);
+  };
 
   return (
     <View style={styles.container}>
@@ -37,34 +45,46 @@ export const Player: FC = () => {
         style={styles.cameraCardContent}
         shadowSize="big"
       >
-        <Canvas
-          style={{
-            width: stageWidth,
-            height: stageHeight,
-          }}
-        >
-          <Image
-            image={currentFrame}
-            fit="cover"
-            x={0}
-            y={0}
-            width={stageWidth}
-            height={stageHeight}
-          />
-          <RetroFilter width={stageWidth} height={stageHeight} />
-        </Canvas>
+        <PlayerVideo />
       </Card>
 
       <Card
         containerStyle={styles.playerCard}
-        style={styles.card}
+        style={styles.playerCardContent}
         shadowSize="big"
       >
-        <Text size="l" weight="bold">
-          {queue?.channel?.name}
-        </Text>
+        {queue && (
+          <>
+            <View style={styles.playerInfo}>
+              <Pressable onPress={playNextChannel}>
+                <Text size="l" weight="bold" align="center">
+                  {queue?.channel?.name}
+                </Text>
+              </Pressable>
+              <Text align="center">{currentTrack?.title}</Text>
+            </View>
 
-        <Text>{currentTrack?.title}</Text>
+            <View style={styles.playerControls}>
+              <Card style={styles.control} onPress={playPrevious}>
+                <Text>Prev</Text>
+              </Card>
+              <Card style={styles.control} onPress={togglePlay}>
+                <Text>{isPlaying ? "Pause" : "Play"}</Text>
+              </Card>
+              <Card style={styles.control} onPress={playNext}>
+                <Text>Next</Text>
+              </Card>
+            </View>
+
+            {progress?.duration ? (
+              <Text>
+                {`${Math.round(progress.position)} / ${Math.round(progress.duration)}`}
+              </Text>
+            ) : null}
+
+            {isBuffering && <Text>Loading...</Text>}
+          </>
+        )}
       </Card>
     </View>
   );

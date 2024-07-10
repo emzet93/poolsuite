@@ -10,6 +10,7 @@ interface TextProps extends RNTextProps {
   color?: keyof Theme["colors"];
   size?: keyof typeof textSize;
   weight?: keyof typeof fontWeight;
+  align?: "auto" | "left" | "center" | "right";
 }
 
 export const Text: FC<TextProps> = ({
@@ -17,11 +18,15 @@ export const Text: FC<TextProps> = ({
   color = "primary",
   size = "m",
   weight = "light",
+  align = "auto",
   ...props
 }) => {
   const { styles } = useStyles(stylesheet);
 
   return (
-    <RNText {...props} style={[styles.text(color, size, weight), style]} />
+    <RNText
+      {...props}
+      style={[styles.text(color, size, weight), style, { textAlign: align }]}
+    />
   );
 };

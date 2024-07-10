@@ -4,12 +4,14 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { StatusBar } from "react-native";
+import { Platform, StatusBar } from "react-native";
 
 import { initLibrary } from "@/store/library";
+import { initializePlayer } from "@/store/player/playbackService";
 import { setupThemes } from "@/theme";
 
 setupThemes();
+initializePlayer();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -36,7 +38,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <StatusBar hidden />
+      <StatusBar hidden={Platform.OS === "ios"} />
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>

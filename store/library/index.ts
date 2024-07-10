@@ -16,11 +16,15 @@ export const setChannels = (channels: Channel[]) =>
   useLibraryStore.setState({ channels });
 
 export const initLibrary = async () => {
-  const channels = await fetchChannels();
+  try {
+    const channels = await fetchChannels();
 
-  setChannels(channels);
+    setChannels(channels);
 
-  if (!usePlayerStore.getState().queue) {
-    playChannel(channels[0]);
+    if (!usePlayerStore.getState().queue) {
+      await playChannel(channels[0], false);
+    }
+  } catch (e) {
+    console.log("error", e);
   }
 };
