@@ -76,9 +76,9 @@ export const Player: FC = () => {
               </Card>
             </View>
 
-            {progress?.duration ? (
+            {currentTrack?.durationMs ? (
               <Text>
-                {`${Math.round(progress.position)} / ${Math.round(progress.duration)}`}
+                {`${Math.round(progress?.position || 0)} / ${Math.round(currentTrack?.durationMs / 1000)}`}
               </Text>
             ) : null}
 

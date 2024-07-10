@@ -18,10 +18,19 @@ import {
   setActiveTrackId,
 } from "@/store/player";
 
-const syncActiveTrackId = debounce(setActiveTrackId, 1000, {
-  leading: true,
-  trailing: true,
-});
+// TODO: check if it's necessary at all
+const syncActiveTrack = debounce(
+  async (index: number) => {
+    const queue = await TrackPlayer.getQueue();
+    const track = queue[index];
+
+    if (track) {
+      setActiveTrackId(track.id);
+    }
+  },
+  1000,
+  { trailing: true, leading: true },
+);
 
 const remotePlayerService = () => async () => {
   // Remote controls events
@@ -47,19 +56,16 @@ const remotePlayerService = () => async () => {
   });
 
   // Playback events
-  TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, (event) => {
-    const trackId: string | undefined = event.track?.id;
-
-    if (trackId) {
-      syncActiveTrackId(trackId);
-    }
+  TrackPlayer.addEventListener(Event.PlaybackTrackChanged, (event) => {
+    syncActiveTrack(event.nextTrack);
   });
   TrackPlayer.addEventListener(Event.PlaybackError, (event) => {
     console.log("Playback error", event);
+    // TODO: check online status
     playNext();
   });
   TrackPlayer.addEventListener(Event.PlaybackState, (event) => {
-    setIsBuffering([State.Buffering, State.Loading].includes(event.state));
+    setIsBuffering([State.Buffering, State.Connecting].includes(event.state));
   });
 };
 
@@ -77,9 +83,9 @@ const setupPlayer = async () => {
     capabilities: REMOTE_CAPABILITIES,
     notificationCapabilities: REMOTE_CAPABILITIES,
     compactCapabilities: REMOTE_CAPABILITIES,
+    alwaysPauseOnInterruption: true,
     progressUpdateEventInterval: Platform.OS === "android" ? 1 : undefined,
     android: {
-      alwaysPauseOnInterruption: true,
       appKilledPlaybackBehavior:
         AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
     },

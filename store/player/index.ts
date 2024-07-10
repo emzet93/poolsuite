@@ -75,7 +75,7 @@ export const playChannel = async (channel: Channel, shouldPlay = true) => {
   });
 
   await TrackPlayer.reset();
-  await TrackPlayer.setQueue(
+  await TrackPlayer.add(
     channel.tracks.map((track) => ({
       id: track.id,
       url: track.url,
@@ -136,9 +136,9 @@ export const playNext = async () => {
 
 export const playPrevious = async () => {
   const index = selectActiveTrackIndex(usePlayerStore.getState());
-  const progress = await TrackPlayer.getProgress();
+  const position = await TrackPlayer.getPosition();
 
-  if (index === 0 || progress.position > 3) {
+  if (index === 0 || position > 3) {
     await TrackPlayer.seekTo(0);
     return;
   }
