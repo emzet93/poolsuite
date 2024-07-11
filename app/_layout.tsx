@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { Platform, StatusBar } from "react-native";
 
 import { initLibrary } from "@/store/library";
+import { playChannel, usePlayerStore } from "@/store/player";
 import { initializePlayer } from "@/store/player/playbackService";
 import { setupThemes } from "@/theme";
 
@@ -29,7 +30,13 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    initLibrary();
+    initLibrary()
+      .then((channels) => {
+        if (!usePlayerStore.getState().queue) {
+          playChannel(channels[0], false);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   if (!loaded) {

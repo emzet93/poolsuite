@@ -1,4 +1,4 @@
-import { PlayerState } from "@/store/player/types";
+import { PlayerState } from "./types";
 
 export const selectIsPlaying = (state: PlayerState) => state.isPlaying;
 

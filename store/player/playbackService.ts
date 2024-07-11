@@ -16,7 +16,7 @@ import {
   setIsBuffering,
   setActiveTrackId,
   setProgress,
-} from "@/store/player";
+} from "./actions";
 
 const syncActiveTrack = debounce(
   async (index: number) => {

@@ -1,14 +1,15 @@
 import TrackPlayer from "react-native-track-player";
 
 import { Channel } from "@/store/library/types";
+import { sleep } from "@/utils/helpers";
+
 import {
   selectActiveTrackIndex,
   selectNextTrack,
   selectPreviousTrack,
   selectProgress,
-  usePlayerStore,
-} from "@/store/player/index";
-import { sleep } from "@/utils/helpers";
+} from "./selectors";
+import { usePlayerStore } from "./store";
 
 export const playChannel = async (channel: Channel, shouldPlay = true) => {
   usePlayerStore.setState({
