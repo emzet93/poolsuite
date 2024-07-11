@@ -5,7 +5,7 @@ import { useStyles } from "react-native-unistyles";
 import { Card } from "@/components/Card";
 import { Text } from "@/components/Text";
 import { PlayerVideo } from "@/screens/Player/PlayerVideo";
-import { useLibraryStore } from "@/store/library";
+import { selectChannels, useLibraryStore } from "@/store/library";
 import {
   playChannel,
   playNext,
@@ -14,6 +14,7 @@ import {
   selectIsBuffering,
   selectIsPlaying,
   selectProgress,
+  selectQueue,
   togglePlay,
   usePlayerStore,
 } from "@/store/player";
@@ -23,8 +24,8 @@ import { stylesheet } from "./Player.style";
 export const Player: FC = () => {
   const { styles } = useStyles(stylesheet);
 
-  const channels = useLibraryStore((state) => state.channels);
-  const queue = usePlayerStore((state) => state.queue);
+  const channels = useLibraryStore(selectChannels);
+  const queue = usePlayerStore(selectQueue);
   const currentTrack = usePlayerStore(selectActiveTrack);
   const isPlaying = usePlayerStore(selectIsPlaying);
   const isBuffering = usePlayerStore(selectIsBuffering);
@@ -59,7 +60,7 @@ export const Player: FC = () => {
             <View style={styles.playerInfo}>
               <Pressable onPress={playNextChannel}>
                 <Text size="l" weight="bold" align="center">
-                  {queue?.channel?.name}
+                  {queue.channel?.name}
                 </Text>
               </Pressable>
               <Text align="center">{currentTrack?.title}</Text>

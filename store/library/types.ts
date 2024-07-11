@@ -18,3 +18,7 @@ export interface Channel {
   tracks: Track[];
   order: number;
 }
+
+export interface LibraryState {
+  channels: Channel[];
+}
