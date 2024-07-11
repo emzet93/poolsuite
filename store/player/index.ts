@@ -12,12 +12,14 @@ export interface PlayerState {
   queue: Queue | undefined;
   isPlaying: boolean;
   isBuffering: boolean;
+  progress: number;
 }
 
 export const usePlayerStore = create<PlayerState>()(() => ({
   queue: undefined,
   isPlaying: false,
   isBuffering: false,
+  progress: 0,
 }));
 
 // selectors
@@ -63,6 +65,8 @@ export const selectPreviousTrack = (state: PlayerState) => {
 
   return tracks[index - 1] || tracks[0];
 };
+
+export const selectProgress = (state: PlayerState) => state.progress;
 
 export const playChannel = async (channel: Channel, shouldPlay = true) => {
   usePlayerStore.setState({
@@ -116,8 +120,13 @@ export const setIsBuffering = async (isBuffering: boolean) => {
   usePlayerStore.setState({ isBuffering });
 };
 
+export const setProgress = async (progress: number) => {
+  usePlayerStore.setState({ progress });
+};
+
 export const setActiveTrackId = (activeTrackId: string) => {
   usePlayerStore.setState((state) => ({
+    progress: 0,
     queue: state.queue && {
       ...state.queue,
       activeTrackId,
@@ -131,15 +140,17 @@ export const playNext = async () => {
   if (nextTrack) {
     setActiveTrackId(nextTrack.id);
     await TrackPlayer.skipToNext();
+    play();
   }
 };
 
 export const playPrevious = async () => {
   const index = selectActiveTrackIndex(usePlayerStore.getState());
-  const position = await TrackPlayer.getPosition();
+  const progress = selectProgress(usePlayerStore.getState());
 
-  if (index === 0 || position > 3) {
+  if (index === 0 || progress > 3) {
     await TrackPlayer.seekTo(0);
+    play();
     return;
   }
 
@@ -147,8 +158,8 @@ export const playPrevious = async () => {
 
   if (previousTrack) {
     setActiveTrackId(previousTrack.id);
-
     await TrackPlayer.skipToPrevious();
+    play();
   }
 };
 

@@ -26,8 +26,7 @@ export const Player: FC = () => {
   const currentTrack = usePlayerStore(selectActiveTrack);
   const isPlaying = usePlayerStore((state) => state.isPlaying);
   const isBuffering = usePlayerStore((state) => state.isBuffering);
-
-  const progress = useProgress();
+  const progress = usePlayerStore((state) => state.progress);
 
   const playNextChannel = () => {
     const activeChannelIndex = channels.findIndex(
@@ -76,11 +75,11 @@ export const Player: FC = () => {
               </Card>
             </View>
 
-            {currentTrack?.durationMs ? (
+            {currentTrack && (
               <Text>
-                {`${Math.round(progress?.position || 0)} / ${Math.round(currentTrack?.durationMs / 1000)}`}
+                {`${Math.round(progress)} / ${Math.round(currentTrack?.durationMs / 1000)}`}
               </Text>
-            ) : null}
+            )}
 
             {isBuffering && <Text>Loading...</Text>}
           </>

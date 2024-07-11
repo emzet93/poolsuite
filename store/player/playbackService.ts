@@ -1,5 +1,4 @@
 import debounce from "lodash.debounce";
-import { Platform } from "react-native";
 import TrackPlayer, {
   AppKilledPlaybackBehavior,
   Capability,
@@ -16,9 +15,9 @@ import {
   seekTo,
   setIsBuffering,
   setActiveTrackId,
+  setProgress,
 } from "@/store/player";
 
-// TODO: check if it's necessary at all
 const syncActiveTrack = debounce(
   async (index: number) => {
     const queue = await TrackPlayer.getQueue();
@@ -28,7 +27,7 @@ const syncActiveTrack = debounce(
       setActiveTrackId(track.id);
     }
   },
-  1000,
+  500,
   { trailing: true, leading: true },
 );
 
@@ -67,6 +66,9 @@ const remotePlayerService = () => async () => {
   TrackPlayer.addEventListener(Event.PlaybackState, (event) => {
     setIsBuffering([State.Buffering, State.Connecting].includes(event.state));
   });
+  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (event) => {
+    setProgress(event.position);
+  });
 };
 
 const setupPlayer = async () => {
@@ -83,8 +85,8 @@ const setupPlayer = async () => {
     capabilities: REMOTE_CAPABILITIES,
     notificationCapabilities: REMOTE_CAPABILITIES,
     compactCapabilities: REMOTE_CAPABILITIES,
+    progressUpdateEventInterval: 1,
     alwaysPauseOnInterruption: true,
-    progressUpdateEventInterval: Platform.OS === "android" ? 1 : undefined,
     android: {
       appKilledPlaybackBehavior:
         AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
