@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import { Pressable, View } from "react-native";
-import { useProgress } from "react-native-track-player";
 import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
@@ -12,6 +11,9 @@ import {
   playNext,
   playPrevious,
   selectActiveTrack,
+  selectIsBuffering,
+  selectIsPlaying,
+  selectProgress,
   togglePlay,
   usePlayerStore,
 } from "@/store/player";
@@ -24,9 +26,9 @@ export const Player: FC = () => {
   const channels = useLibraryStore((state) => state.channels);
   const queue = usePlayerStore((state) => state.queue);
   const currentTrack = usePlayerStore(selectActiveTrack);
-  const isPlaying = usePlayerStore((state) => state.isPlaying);
-  const isBuffering = usePlayerStore((state) => state.isBuffering);
-  const progress = usePlayerStore((state) => state.progress);
+  const isPlaying = usePlayerStore(selectIsPlaying);
+  const isBuffering = usePlayerStore(selectIsBuffering);
+  const progress = usePlayerStore(selectProgress);
 
   const playNextChannel = () => {
     const activeChannelIndex = channels.findIndex(

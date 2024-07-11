@@ -2,6 +2,7 @@ import TrackPlayer from "react-native-track-player";
 import { create } from "zustand";
 
 import { Channel } from "@/store/library/types";
+import { sleep } from "@/utils/helpers";
 
 export interface Queue {
   channel: Channel;
@@ -65,6 +66,10 @@ export const selectPreviousTrack = (state: PlayerState) => {
 
   return tracks[index - 1] || tracks[0];
 };
+
+export const selectIsPlaying = (state: PlayerState) => state.isPlaying;
+
+export const selectIsBuffering = (state: PlayerState) => state.isBuffering;
 
 export const selectProgress = (state: PlayerState) => state.progress;
 
@@ -134,13 +139,24 @@ export const setActiveTrackId = (activeTrackId: string) => {
   }));
 };
 
+const onTrackChange = async () => {
+  usePlayerStore.setState({
+    isPlaying: true,
+  });
+  // There is a bug on iOS which happens when calling TrackPlayer.play() right after changing track.
+  // After change, it plays half a second of previous song in queue.
+  // This await helps with that without affecting user experience.
+  await sleep(300);
+  return TrackPlayer.play();
+};
+
 export const playNext = async () => {
   const nextTrack = selectNextTrack(usePlayerStore.getState());
 
   if (nextTrack) {
     setActiveTrackId(nextTrack.id);
     await TrackPlayer.skipToNext();
-    play();
+    onTrackChange();
   }
 };
 
@@ -150,7 +166,7 @@ export const playPrevious = async () => {
 
   if (index === 0 || progress > 3) {
     await TrackPlayer.seekTo(0);
-    play();
+    onTrackChange();
     return;
   }
 
@@ -159,7 +175,7 @@ export const playPrevious = async () => {
   if (previousTrack) {
     setActiveTrackId(previousTrack.id);
     await TrackPlayer.skipToPrevious();
-    play();
+    onTrackChange();
   }
 };
 
