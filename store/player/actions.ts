@@ -1,5 +1,4 @@
 import { Channel } from "@/store/library/types";
-import { sleep } from "@/utils/helpers";
 
 import {
   selectActiveTrackIndex,
@@ -68,14 +67,7 @@ export const setActiveTrackId = (activeTrackId: string) => {
 };
 
 const onTrackChange = async () => {
-  usePlayerStore.setState({
-    isPlaying: true,
-  });
-  // There is a bug on iOS which happens when calling TrackPlayer.play() right after changing track.
-  // After change, it plays half a second of previous song in queue.
-  // This await helps with that without affecting user experience.
-  await sleep(300);
-  return TrackPlayer.play();
+  play();
 };
 
 export const playNext = async () => {
@@ -83,7 +75,7 @@ export const playNext = async () => {
 
   if (nextTrack) {
     setActiveTrackId(nextTrack.id);
-    await TrackPlayer.skipToNext();
+    await TrackPlayer.skipToNext(nextTrack);
     onTrackChange();
   }
 };
@@ -102,7 +94,7 @@ export const playPrevious = async () => {
 
   if (previousTrack) {
     setActiveTrackId(previousTrack.id);
-    await TrackPlayer.skipToPrevious();
+    await TrackPlayer.skipToPrevious(previousTrack);
     onTrackChange();
   }
 };

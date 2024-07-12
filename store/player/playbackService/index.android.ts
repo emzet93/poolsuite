@@ -53,7 +53,6 @@ const remotePlayerService = () => async () => {
   TrackPlayerAndroid.addEventListener(
     Event.PlaybackActiveTrackChanged,
     (event) => {
-      console.log("TRACK CHANGED");
       if (event.track) {
         syncActiveTrack(event.track.id);
       }

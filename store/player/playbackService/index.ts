@@ -1,10 +1,4 @@
-import debounce from "lodash.debounce";
-import TrackPlayerIOS, {
-  Capability,
-  Event,
-  RepeatMode,
-  State,
-} from "track-player-ios";
+import TrackPlayerIOS, { Capability, Event, State } from "track-player-ios";
 
 import {
   pause,
@@ -13,22 +7,8 @@ import {
   playPrevious,
   seekTo,
   setIsBuffering,
-  setActiveTrackId,
   setProgress,
 } from "../actions";
-
-const syncActiveTrack = debounce(
-  async (index: number) => {
-    const queue = await TrackPlayerIOS.getQueue();
-    const track = queue[index];
-
-    if (track) {
-      setActiveTrackId(track.id);
-    }
-  },
-  500,
-  { trailing: true, leading: true },
-);
 
 const remotePlayerService = () => async () => {
   // Remote controls events
@@ -54,8 +34,10 @@ const remotePlayerService = () => async () => {
   });
 
   // Playback events
-  TrackPlayerIOS.addEventListener(Event.PlaybackTrackChanged, (event) => {
-    syncActiveTrack(event.nextTrack);
+  TrackPlayerIOS.addEventListener(Event.PlaybackQueueEnded, (event) => {
+    if (event.position > 0) {
+      playNext();
+    }
   });
   TrackPlayerIOS.addEventListener(Event.PlaybackError, (event) => {
     console.log("Playback error", event);
@@ -87,7 +69,6 @@ const setupPlayer = async () => {
     progressUpdateEventInterval: 1,
     alwaysPauseOnInterruption: true,
   });
-  await TrackPlayerIOS.setRepeatMode(RepeatMode.Queue);
 };
 
 export const initializePlayer = () => {

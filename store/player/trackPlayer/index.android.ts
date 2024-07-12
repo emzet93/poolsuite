@@ -6,8 +6,8 @@ import { TrackPlayerService } from "@/store/player/trackPlayer/types";
 export const TrackPlayer: TrackPlayerService = {
   play: TrackPlayerAndroid.play,
   pause: TrackPlayerAndroid.pause,
-  skipToNext: TrackPlayerAndroid.skipToNext,
-  skipToPrevious: TrackPlayerAndroid.skipToPrevious,
+  skipToNext: (track: Track) => TrackPlayerAndroid.skipToNext(),
+  skipToPrevious: (track: Track) => TrackPlayerAndroid.skipToPrevious(),
   seekTo: TrackPlayerAndroid.seekTo,
   reset: TrackPlayerAndroid.reset,
   setQueue: async (tracks: Track[]) => {
