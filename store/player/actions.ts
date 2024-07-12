@@ -1,5 +1,3 @@
-import TrackPlayer from "react-native-track-player";
-
 import { Channel } from "@/store/library/types";
 import { sleep } from "@/utils/helpers";
 
@@ -10,6 +8,7 @@ import {
   selectProgress,
 } from "./selectors";
 import { usePlayerStore } from "./store";
+import { TrackPlayer } from "./trackPlayer";
 
 export const playChannel = async (channel: Channel, shouldPlay = true) => {
   usePlayerStore.setState({
@@ -21,16 +20,7 @@ export const playChannel = async (channel: Channel, shouldPlay = true) => {
     isBuffering: false,
   });
 
-  await TrackPlayer.reset();
-  await TrackPlayer.add(
-    channel.tracks.map((track) => ({
-      id: track.id,
-      url: track.url,
-      title: track.title,
-      artist: track.artist,
-      duration: track.durationMs / 1000,
-    })),
-  );
+  await TrackPlayer.setQueue(channel.tracks);
 
   if (shouldPlay) {
     await TrackPlayer.play();

@@ -1,11 +1,10 @@
 import debounce from "lodash.debounce";
-import TrackPlayer, {
-  AppKilledPlaybackBehavior,
+import TrackPlayerIOS, {
   Capability,
   Event,
   RepeatMode,
   State,
-} from "react-native-track-player";
+} from "track-player-ios";
 
 import {
   pause,
@@ -16,11 +15,11 @@ import {
   setIsBuffering,
   setActiveTrackId,
   setProgress,
-} from "./actions";
+} from "../actions";
 
 const syncActiveTrack = debounce(
   async (index: number) => {
-    const queue = await TrackPlayer.getQueue();
+    const queue = await TrackPlayerIOS.getQueue();
     const track = queue[index];
 
     if (track) {
@@ -33,40 +32,40 @@ const syncActiveTrack = debounce(
 
 const remotePlayerService = () => async () => {
   // Remote controls events
-  TrackPlayer.addEventListener(Event.RemotePlay, () => {
+  TrackPlayerIOS.addEventListener(Event.RemotePlay, () => {
     play();
   });
-  TrackPlayer.addEventListener(Event.RemotePause, () => {
+  TrackPlayerIOS.addEventListener(Event.RemotePause, () => {
     pause();
   });
-  TrackPlayer.addEventListener(Event.RemoteNext, () => {
+  TrackPlayerIOS.addEventListener(Event.RemoteNext, () => {
     playNext();
   });
-  TrackPlayer.addEventListener(Event.RemotePrevious, () => {
+  TrackPlayerIOS.addEventListener(Event.RemotePrevious, () => {
     playPrevious();
   });
-  TrackPlayer.addEventListener(Event.RemoteSeek, (event) => {
+  TrackPlayerIOS.addEventListener(Event.RemoteSeek, (event) => {
     seekTo(event.position);
   });
-  TrackPlayer.addEventListener(Event.RemoteDuck, ({ paused }) => {
+  TrackPlayerIOS.addEventListener(Event.RemoteDuck, ({ paused }) => {
     if (paused) {
       pause();
     }
   });
 
   // Playback events
-  TrackPlayer.addEventListener(Event.PlaybackTrackChanged, (event) => {
+  TrackPlayerIOS.addEventListener(Event.PlaybackTrackChanged, (event) => {
     syncActiveTrack(event.nextTrack);
   });
-  TrackPlayer.addEventListener(Event.PlaybackError, (event) => {
+  TrackPlayerIOS.addEventListener(Event.PlaybackError, (event) => {
     console.log("Playback error", event);
     // TODO: check online status
     playNext();
   });
-  TrackPlayer.addEventListener(Event.PlaybackState, (event) => {
+  TrackPlayerIOS.addEventListener(Event.PlaybackState, (event) => {
     setIsBuffering([State.Buffering, State.Connecting].includes(event.state));
   });
-  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (event) => {
+  TrackPlayerIOS.addEventListener(Event.PlaybackProgressUpdated, (event) => {
     setProgress(event.position);
   });
 };
@@ -80,22 +79,18 @@ const setupPlayer = async () => {
     Capability.SeekTo,
   ];
 
-  await TrackPlayer.setupPlayer();
-  await TrackPlayer.updateOptions({
+  await TrackPlayerIOS.setupPlayer();
+  await TrackPlayerIOS.updateOptions({
     capabilities: REMOTE_CAPABILITIES,
     notificationCapabilities: REMOTE_CAPABILITIES,
     compactCapabilities: REMOTE_CAPABILITIES,
     progressUpdateEventInterval: 1,
     alwaysPauseOnInterruption: true,
-    android: {
-      appKilledPlaybackBehavior:
-        AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
-    },
   });
-  await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+  await TrackPlayerIOS.setRepeatMode(RepeatMode.Queue);
 };
 
 export const initializePlayer = () => {
-  TrackPlayer.registerPlaybackService(remotePlayerService);
+  TrackPlayerIOS.registerPlaybackService(remotePlayerService);
   return setupPlayer();
 };
