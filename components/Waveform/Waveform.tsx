@@ -1,16 +1,16 @@
+import { Canvas, Rect } from "@shopify/react-native-skia";
 import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
-import { View } from "react-native";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
-const width = UnistylesRuntime.screen.width - 16 - 4;
-const height = 50;
+const waveformWidth = UnistylesRuntime.screen.width - 16 - 4;
+const waveformHeight = 50;
 
 const barWidth = 1;
 const gap = 1;
-const barsNumber = Math.floor(width / (barWidth + 1));
+const barsNumber = Math.floor(waveformWidth / (barWidth + 1));
 
-const baseArray: number[] = new Array(barsNumber).fill(height / 2);
+const baseArray: number[] = new Array(barsNumber).fill(waveformHeight / 2);
 console.log("BAR NUMBER", barsNumber);
 
 interface IProps {
@@ -33,66 +33,52 @@ export const Waveform: FC<IProps> = ({ waveformUrl, progress, duration }) => {
       const samples: number[] = response.data.samples;
       const groupedSamples = transformArray(samples, barsNumber);
       const _waveform = groupedSamples.map((bar) =>
-        Math.round((bar * height) / referenceHeight),
+        Math.round((bar * waveformHeight) / referenceHeight),
       );
       setWaveform(_waveform);
     });
   }, [waveformUrl]);
 
   return (
-    <View
+    <Canvas
       style={{
-        width: width,
-        height: height,
+        width: waveformWidth,
+        height: waveformHeight,
         backgroundColor: theme.colors.primary,
       }}
     >
-      {waveform.map((height, index) => {
-        if (index > highlightedBars) {
+      {waveform.map((height, barIndex) => {
+        if (barIndex > highlightedBars) {
           return (
-            <View
-              key={index}
-              style={{
-                position: "absolute",
-                bottom: 0,
-                height,
-                left: index * (barWidth + gap),
-                width: barWidth,
-                flexDirection: "column",
-                gap,
-              }}
-            >
+            <>
               {new Array(Math.ceil(height / (barWidth + gap)))
                 .fill(0)
                 .map((_, index) => (
-                  <View
-                    key={index}
-                    style={{
-                      width: barWidth,
-                      height: barWidth,
-                      backgroundColor: theme.colors.secondary,
-                    }}
+                  <Rect
+                    key={`rect-${barIndex}-${index}`}
+                    width={barWidth}
+                    height={barWidth}
+                    color={theme.colors.secondary}
+                    x={barIndex * (barWidth + gap)}
+                    y={waveformHeight - index * (barWidth + gap)}
                   />
                 ))}
-            </View>
+            </>
           );
         }
 
         return (
-          <View
-            key={index}
-            style={{
-              position: "absolute",
-              bottom: 0,
-              height,
-              left: index * (barWidth + gap),
-              width: barWidth,
-              backgroundColor: theme.colors.secondary,
-            }}
+          <Rect
+            key={`bar-${barIndex}`}
+            x={barIndex * (barWidth + gap)}
+            y={waveformHeight - height}
+            width={barWidth}
+            height={height}
+            color={theme.colors.secondary}
           />
         );
       })}
-    </View>
+    </Canvas>
   );
 };
 
