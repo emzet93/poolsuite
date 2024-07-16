@@ -1,14 +1,7 @@
 import { Canvas, Group, Rect } from "@shopify/react-native-skia";
 import axios from "axios";
-import React, {
-  FC,
-  Fragment,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { SharedValue, useDerivedValue } from "react-native-reanimated";
+import React, { FC, Fragment, useEffect, useRef, useState } from "react";
+import { SharedValue, makeMutable, runOnUI } from "react-native-reanimated";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
 const waveformWidth = UnistylesRuntime.screen.width - 16 - 4;
@@ -16,9 +9,85 @@ const waveformHeight = 50;
 
 const barWidth = 1;
 const gap = 1;
-const barsNumber = Math.floor(waveformWidth / (barWidth + 1));
+const barsNumber = Math.floor(waveformWidth / (barWidth + gap));
+const rectsNumber = Math.floor(waveformHeight / (barWidth + gap));
 
 const baseArray: number[] = new Array(barsNumber).fill(waveformHeight / 2);
+
+interface WaveformRect {
+  opacity: SharedValue<number>;
+  x: SharedValue<number>;
+  y: SharedValue<number>;
+  width: number;
+  height: number;
+}
+
+const _matrix: WaveformRect[][] = [];
+
+for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
+  _matrix[barIndex] = [];
+
+  for (let rectIndex = 0; rectIndex < rectsNumber; rectIndex++) {
+    _matrix[barIndex][rectIndex] = {
+      opacity: makeMutable(1),
+      x: makeMutable(barIndex * (barWidth + gap)),
+      y: makeMutable(waveformHeight - rectIndex * (barWidth + gap)),
+      width: barWidth,
+      height: barWidth,
+    };
+  }
+}
+
+const regenerateMatrix = (mutableMatrix: WaveformRect[][], data: number[]) => {
+  "worklet";
+
+  for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
+    const height = data[barIndex];
+
+    for (let rectIndex = 0; rectIndex < rectsNumber; rectIndex++) {
+      const opacity = rectIndex * (barWidth + gap) > height ? 0 : 1;
+      mutableMatrix[barIndex][rectIndex].opacity.value = opacity;
+    }
+  }
+};
+
+interface ProgressRect {
+  opacity: SharedValue<number>;
+  x: SharedValue<number>;
+  y: SharedValue<number>;
+  width: number;
+  height: SharedValue<number>;
+}
+const _progress: ProgressRect[] = [];
+
+for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
+  _progress[barIndex] = {
+    opacity: makeMutable(0),
+    x: makeMutable(barIndex * (barWidth + gap)),
+    y: makeMutable(0),
+    width: barWidth,
+    height: makeMutable(0),
+  };
+}
+
+const regenerateProgress = (progress: number, duration: number) => {
+  "worklet";
+
+  const highlightedBars = Math.floor((progress * barsNumber) / duration);
+
+  for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
+    _progress[barIndex].opacity.value = barIndex < highlightedBars ? 1 : 0;
+  }
+};
+
+const regenerateProgressData = (data: number[]) => {
+  "worklet";
+
+  for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
+    _progress[barIndex].height.value = data[barIndex];
+    _progress[barIndex].y.value = waveformHeight - data[barIndex];
+  }
+};
 
 interface IProps {
   waveformUrl: string;
@@ -29,14 +98,18 @@ interface IProps {
 export const Waveform: FC<IProps> = React.memo(
   ({ waveformUrl, progress, duration }) => {
     const { theme } = useStyles();
-    const [waveformData, setWaveformData] = useState<number[]>();
-    const highlightedBars = Math.floor((progress * barsNumber) / duration);
 
-    const _url = useRef(waveformUrl);
+    const [matrix] = useState(_matrix);
+    const [progressBars] = useState(_progress);
+
+    const _url = useRef<string>();
 
     if (waveformUrl !== _url.current) {
       _url.current = waveformUrl;
-      setWaveformData(undefined);
+      runOnUI(() => {
+        regenerateMatrix(matrix, baseArray);
+        regenerateProgressData(baseArray);
+      })();
     }
 
     useEffect(() => {
@@ -46,13 +119,16 @@ export const Waveform: FC<IProps> = React.memo(
         .get(waveformUrl)
         .then((response) => {
           if (!isCancelled) {
-            const referenceHeight: number = response.data.height;
-            const samples: number[] = response.data.samples;
-            const groupedSamples = transformArray(samples, barsNumber);
-            const _waveform = groupedSamples.map((bar) =>
-              Math.round((bar * waveformHeight) / referenceHeight),
-            );
-            setWaveformData(_waveform);
+            runOnUI(() => {
+              const referenceHeight: number = response.data.height;
+              const samples: number[] = response.data.samples;
+              const groupedSamples = transformArray(samples, barsNumber);
+              const data = groupedSamples.map((bar, index) =>
+                Math.round((bar * waveformHeight) / referenceHeight),
+              );
+              regenerateMatrix(matrix, data);
+              regenerateProgressData(data);
+            })();
           }
         })
         .catch((e) => {
@@ -62,11 +138,13 @@ export const Waveform: FC<IProps> = React.memo(
       return () => {
         isCancelled = true;
       };
-    }, [waveformUrl]);
+    }, [matrix, waveformUrl]);
 
-    const placeholderOpacity = useDerivedValue(() =>
-      waveformData === undefined ? 1 : 0,
-    );
+    useEffect(() => {
+      runOnUI(() => {
+        regenerateProgress(progress, duration);
+      })();
+    }, [progress, duration]);
 
     return (
       <Canvas
@@ -76,66 +154,65 @@ export const Waveform: FC<IProps> = React.memo(
           backgroundColor: theme.colors.primary,
         }}
       >
-        <WaveformBase waveformData={baseArray} opacity={placeholderOpacity} />
-        {waveformData && <WaveformBase waveformData={waveformData} />}
-        <Group color={theme.colors.secondary}>
-          {(waveformData || baseArray)
-            .slice(0, highlightedBars)
-            .map((height, index) => (
-              <ProgressBar
-                key={`progressBar-${index}`}
-                x={index * (barWidth + gap)}
-                y={waveformHeight - height}
-                width={barWidth}
-                height={height}
-              />
-            ))}
-        </Group>
+        <WaveformBase waveformData={matrix} gap={gap} barWidth={barWidth} />
+        <ProgressBar progressData={progressBars} />
       </Canvas>
     );
   },
 );
 
 const WaveformBase: FC<{
-  waveformData: number[];
-  opacity?: SharedValue<number>;
-}> = React.memo(({ waveformData, opacity }) => {
+  waveformData: WaveformRect[][];
+  gap: number;
+  barWidth: number;
+}> = React.memo(({ waveformData }) => {
   const { theme } = useStyles();
 
   return (
-    <Group color={theme.colors.secondary} opacity={opacity}>
-      {waveformData.map((height, barIndex) => (
+    <Group color={theme.colors.secondary}>
+      {waveformData.map((bar, barIndex) => (
         <Fragment key={`waveformBar-${barIndex}`}>
-          {new Array(Math.ceil(height / (barWidth + gap)))
-            .fill(0)
-            .map((_, index) => (
+          {bar.map((rect, index) => {
+            return (
               <Rect
                 key={`waveformRect-${barIndex}-${index}`}
-                width={barWidth}
-                height={barWidth}
-                x={barIndex * (barWidth + gap)}
-                y={waveformHeight - index * (barWidth + gap)}
+                opacity={rect.opacity}
+                width={rect.width}
+                height={rect.height}
+                x={rect.x}
+                y={rect.y}
               />
-            ))}
+            );
+          })}
         </Fragment>
       ))}
     </Group>
   );
 });
 
-const ProgressBar: FC<{ x: number; height: number; y: number; width: number }> =
-  React.memo(({ x, y, height, width }) => {
+const ProgressBar: FC<{ progressData: ProgressRect[] }> = React.memo(
+  ({ progressData }) => {
+    const { theme } = useStyles();
+
     return (
-      <Rect
-        x={x}
-        y={waveformHeight - height}
-        width={barWidth}
-        height={height}
-      />
+      <Group color={theme.colors.secondary}>
+        {progressData.map((bar, index) => (
+          <Rect
+            key={`progressBar-${index}`}
+            opacity={bar.opacity}
+            x={bar.x}
+            y={bar.y}
+            width={bar.width}
+            height={bar.height}
+          />
+        ))}
+      </Group>
     );
-  });
+  },
+);
 
 function transformArray(arr: number[], m: number): number[] {
+  "worklet";
   const n = arr.length;
   if (m > n || m <= 0) {
     throw new Error("Invalid value of m");
