@@ -59,7 +59,6 @@ export const Player: FC = () => {
         {currentTrack && (
           <Waveform
             waveformUrl={currentTrack.waveformUrl}
-            key={currentTrack.waveformUrl}
             progress={progress}
             duration={currentTrack.durationMs / 1000}
           />
