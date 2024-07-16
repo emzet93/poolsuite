@@ -12,4 +12,4 @@ export const setupThemes = () => {
   });
 };
 
-export { appThemes, appThemesList } from "./themes";
+export { appThemes, appThemesList, defaultSpacing } from "./themes";

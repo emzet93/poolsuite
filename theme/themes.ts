@@ -1,6 +1,6 @@
 import { AppThemes, Theme } from "@/theme/types";
 
-const defaultSpacing = {
+export const defaultSpacing = {
   xxs: 4,
   xs: 8,
   s: 16,
@@ -10,7 +10,7 @@ const defaultSpacing = {
   xxl: 40,
 };
 
-const defaultCardStyle = {
+export const defaultCardStyle = {
   borderRadius: 4,
   borderWidth: 1,
 };
