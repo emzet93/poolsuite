@@ -1,93 +1,18 @@
-import { Canvas, Group, Rect } from "@shopify/react-native-skia";
+import { Canvas, SkImage, Image, Skia, rect } from "@shopify/react-native-skia";
 import axios from "axios";
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
-import { SharedValue, makeMutable, runOnUI } from "react-native-reanimated";
+import { SharedValue, runOnUI, useSharedValue } from "react-native-reanimated";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
 const waveformWidth = UnistylesRuntime.screen.width - 16 - 4;
-const waveformHeight = 50;
+const waveformHeight = 40;
 
 const barWidth = 1;
 const gap = 1;
 const barsNumber = Math.floor(waveformWidth / (barWidth + gap));
-const rectsNumber = Math.floor(waveformHeight / (barWidth + gap));
-
-const baseArray: number[] = new Array(barsNumber).fill(waveformHeight / 2);
-
-interface WaveformRect {
-  opacity: SharedValue<number>;
-  x: SharedValue<number>;
-  y: SharedValue<number>;
-  width: number;
-  height: number;
-}
-
-const _matrix: WaveformRect[][] = [];
-
-for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
-  _matrix[barIndex] = [];
-
-  for (let rectIndex = 0; rectIndex < rectsNumber; rectIndex++) {
-    _matrix[barIndex][rectIndex] = {
-      opacity: makeMutable(1),
-      x: makeMutable(barIndex * (barWidth + gap)),
-      y: makeMutable(waveformHeight - rectIndex * (barWidth + gap)),
-      width: barWidth,
-      height: barWidth,
-    };
-  }
-}
-
-const regenerateMatrix = (mutableMatrix: WaveformRect[][], data: number[]) => {
-  "worklet";
-
-  for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
-    const height = data[barIndex];
-
-    for (let rectIndex = 0; rectIndex < rectsNumber; rectIndex++) {
-      const opacity = rectIndex * (barWidth + gap) > height ? 0 : 1;
-      mutableMatrix[barIndex][rectIndex].opacity.value = opacity;
-    }
-  }
-};
-
-interface ProgressRect {
-  opacity: SharedValue<number>;
-  x: SharedValue<number>;
-  y: SharedValue<number>;
-  width: number;
-  height: SharedValue<number>;
-}
-const _progress: ProgressRect[] = [];
-
-for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
-  _progress[barIndex] = {
-    opacity: makeMutable(0),
-    x: makeMutable(barIndex * (barWidth + gap)),
-    y: makeMutable(0),
-    width: barWidth,
-    height: makeMutable(0),
-  };
-}
-
-const regenerateProgress = (progress: number, duration: number) => {
-  "worklet";
-
-  const highlightedBars = Math.floor((progress * barsNumber) / duration);
-
-  for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
-    _progress[barIndex].opacity.value = barIndex < highlightedBars ? 1 : 0;
-  }
-};
-
-const regenerateProgressData = (data: number[]) => {
-  "worklet";
-
-  for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
-    _progress[barIndex].height.value = data[barIndex];
-    _progress[barIndex].y.value = waveformHeight - data[barIndex];
-  }
-};
+const placeholderData: number[] = new Array(barsNumber).fill(
+  waveformHeight / 2,
+);
 
 interface IProps {
   waveformUrl: string;
@@ -95,21 +20,92 @@ interface IProps {
   duration: number;
 }
 
+// Use offscreen painting instead of declarative api as it seems to be much more performant both on initial mount
+// and updates
+const drawWaveform = (
+  image: SharedValue<SkImage | null>,
+  data: number[],
+  color: string,
+) => {
+  "worklet";
+  const surface = Skia.Surface.MakeOffscreen(waveformWidth, waveformHeight)!;
+  const canvas = surface.getCanvas();
+  const paint = Skia.Paint();
+  paint.setColor(Skia.Color(color));
+
+  for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
+    const height = data[barIndex] / (barWidth + gap);
+
+    for (let rectIndex = 0; rectIndex < height; rectIndex++) {
+      canvas.drawRect(
+        rect(
+          barIndex * (barWidth + gap),
+          waveformHeight - rectIndex * (barWidth + gap),
+          barWidth,
+          barWidth,
+        ),
+        paint,
+      );
+    }
+  }
+
+  surface.flush();
+  image.value = surface.makeImageSnapshot();
+};
+
+const drawProgressBars = (
+  image: SharedValue<SkImage | null>,
+  data: number[],
+  highlightedBars: number,
+  color: string,
+) => {
+  "worklet";
+  const surface = Skia.Surface.MakeOffscreen(waveformWidth, waveformHeight)!;
+  const canvas = surface.getCanvas();
+  const paint = Skia.Paint();
+  paint.setColor(Skia.Color(color));
+
+  for (let barIndex = 0; barIndex < highlightedBars; barIndex++) {
+    const height = data[barIndex];
+
+    canvas.drawRect(
+      rect(
+        barIndex * (barWidth + gap),
+        waveformHeight - height,
+        barWidth,
+        height,
+      ),
+      paint,
+    );
+  }
+
+  surface.flush();
+  image.value = surface.makeImageSnapshot();
+};
+
 export const Waveform: FC<IProps> = React.memo(
-  ({ waveformUrl, progress, duration }) => {
+  ({ waveformUrl, progress: _progress, duration: _duration }) => {
     const { theme } = useStyles();
 
-    const [matrix] = useState(_matrix);
-    const [progressBars] = useState(_progress);
+    const waveformImage = useSharedValue<SkImage | null>(null);
+    const progressImage = useSharedValue<SkImage | null>(null);
+    const progress = useSharedValue(_progress);
+    const duration = useSharedValue(_duration);
+    const color = useSharedValue(theme.colors.secondary);
+    const waveformData = useSharedValue(placeholderData);
 
-    const _url = useRef<string>();
+    const waveformUrlRef = useRef<string>();
 
-    if (waveformUrl !== _url.current) {
-      _url.current = waveformUrl;
-      runOnUI(() => {
-        regenerateMatrix(matrix, baseArray);
-        regenerateProgressData(baseArray);
-      })();
+    if (waveformUrl !== waveformUrlRef.current) {
+      waveformUrlRef.current = waveformUrl;
+      waveformData.value = placeholderData;
+      runOnUI(drawWaveform)(waveformImage, placeholderData, color.value);
+      runOnUI(drawProgressBars)(
+        progressImage,
+        placeholderData,
+        Math.floor((progress.value * barsNumber) / duration.value),
+        color.value,
+      );
     }
 
     useEffect(() => {
@@ -119,16 +115,21 @@ export const Waveform: FC<IProps> = React.memo(
         .get(waveformUrl)
         .then((response) => {
           if (!isCancelled) {
-            runOnUI(() => {
-              const referenceHeight: number = response.data.height;
-              const samples: number[] = response.data.samples;
-              const groupedSamples = transformArray(samples, barsNumber);
-              const data = groupedSamples.map((bar, index) =>
-                Math.round((bar * waveformHeight) / referenceHeight),
-              );
-              regenerateMatrix(matrix, data);
-              regenerateProgressData(data);
-            })();
+            const referenceHeight: number = response.data.height;
+            const samples: number[] = response.data.samples;
+            const groupedSamples = transformArray(samples, barsNumber);
+            const data = groupedSamples.map((bar, index) =>
+              Math.round((bar * waveformHeight) / referenceHeight),
+            );
+
+            waveformData.value = data;
+            runOnUI(drawWaveform)(waveformImage, data, color.value);
+            runOnUI(drawProgressBars)(
+              progressImage,
+              data,
+              Math.floor((progress.value * barsNumber) / duration.value),
+              color.value,
+            );
           }
         })
         .catch((e) => {
@@ -138,13 +139,62 @@ export const Waveform: FC<IProps> = React.memo(
       return () => {
         isCancelled = true;
       };
-    }, [matrix, waveformUrl]);
+    }, [
+      waveformUrl,
+      waveformImage,
+      color,
+      waveformData,
+      progressImage,
+      progress,
+      duration,
+    ]);
 
     useEffect(() => {
-      runOnUI(() => {
-        regenerateProgress(progress, duration);
-      })();
-    }, [progress, duration]);
+      if (color.value !== theme.colors.secondary) {
+        color.value = theme.colors.secondary;
+        runOnUI(drawWaveform)(
+          waveformImage,
+          waveformData.value,
+          theme.colors.secondary,
+        );
+        runOnUI(drawProgressBars)(
+          progressImage,
+          waveformData.value,
+          Math.floor((progress.value * barsNumber) / duration.value),
+          theme.colors.secondary,
+        );
+      }
+    }, [
+      theme.colors.secondary,
+      color,
+      waveformImage,
+      progressImage,
+      waveformData,
+      progress,
+      duration,
+    ]);
+
+    useEffect(() => {
+      if (progress.value !== _progress || duration.value !== _duration) {
+        progress.value = _progress;
+        duration.value = _duration;
+
+        runOnUI(drawProgressBars)(
+          progressImage,
+          waveformData.value,
+          Math.floor((_progress * barsNumber) / _duration),
+          color.value,
+        );
+      }
+    }, [
+      _progress,
+      _duration,
+      color,
+      waveformData,
+      progress,
+      duration,
+      progressImage,
+    ]);
 
     return (
       <Canvas
@@ -154,59 +204,21 @@ export const Waveform: FC<IProps> = React.memo(
           backgroundColor: theme.colors.primary,
         }}
       >
-        <WaveformBase waveformData={matrix} gap={gap} barWidth={barWidth} />
-        <ProgressBar progressData={progressBars} />
+        <Image
+          image={waveformImage}
+          x={0}
+          y={0}
+          width={waveformWidth}
+          height={waveformHeight}
+        />
+        <Image
+          image={progressImage}
+          x={0}
+          y={0}
+          width={waveformWidth}
+          height={waveformHeight}
+        />
       </Canvas>
-    );
-  },
-);
-
-const WaveformBase: FC<{
-  waveformData: WaveformRect[][];
-  gap: number;
-  barWidth: number;
-}> = React.memo(({ waveformData }) => {
-  const { theme } = useStyles();
-
-  return (
-    <Group color={theme.colors.secondary}>
-      {waveformData.map((bar, barIndex) => (
-        <Fragment key={`waveformBar-${barIndex}`}>
-          {bar.map((rect, index) => {
-            return (
-              <Rect
-                key={`waveformRect-${barIndex}-${index}`}
-                opacity={rect.opacity}
-                width={rect.width}
-                height={rect.height}
-                x={rect.x}
-                y={rect.y}
-              />
-            );
-          })}
-        </Fragment>
-      ))}
-    </Group>
-  );
-});
-
-const ProgressBar: FC<{ progressData: ProgressRect[] }> = React.memo(
-  ({ progressData }) => {
-    const { theme } = useStyles();
-
-    return (
-      <Group color={theme.colors.secondary}>
-        {progressData.map((bar, index) => (
-          <Rect
-            key={`progressBar-${index}`}
-            opacity={bar.opacity}
-            x={bar.x}
-            y={bar.y}
-            width={bar.width}
-            height={bar.height}
-          />
-        ))}
-      </Group>
     );
   },
 );
