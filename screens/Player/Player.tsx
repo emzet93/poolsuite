@@ -4,6 +4,7 @@ import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
 import { Text } from "@/components/Text";
+import { Waveform } from "@/components/Waveform";
 import { PlayerVideo } from "@/screens/Player/PlayerVideo";
 import { selectChannels, useLibraryStore } from "@/store/library";
 import {
@@ -55,6 +56,14 @@ export const Player: FC = () => {
         style={styles.playerCardContent}
         shadowSize="big"
       >
+        {currentTrack && (
+          <Waveform
+            waveformUrl={currentTrack.waveformUrl}
+            progress={progress}
+            duration={currentTrack.durationMs / 1000}
+          />
+        )}
+
         {queue && (
           <>
             <View style={styles.playerInfo}>
