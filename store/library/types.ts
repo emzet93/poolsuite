@@ -1,5 +1,6 @@
 export interface Track {
   id: string;
+  url: string;
   title: string;
   artist: string;
   durationMs: number;
@@ -16,4 +17,8 @@ export interface Channel {
   totalTracks: number;
   tracks: Track[];
   order: number;
+}
+
+export interface LibraryState {
+  channels: Channel[];
 }
