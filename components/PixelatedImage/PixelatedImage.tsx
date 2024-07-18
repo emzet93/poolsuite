@@ -2,6 +2,8 @@ import { Canvas, Image, rect, Skia, SkImage } from "@shopify/react-native-skia";
 import { FC } from "react";
 import { runOnUI, SharedValue, useSharedValue } from "react-native-reanimated";
 
+import { ThemeFilter } from "@/components/Filters";
+
 interface IProps {
   width: number;
   height: number;
@@ -25,6 +27,7 @@ export const PixelatedImage: FC<IProps> = ({ width, height, image }) => {
         width={width}
         height={height}
       />
+      <ThemeFilter width={width} height={height} />
     </Canvas>
   );
 };
@@ -66,7 +69,7 @@ const getCoverRectangles = (
   };
 };
 
-const transformImage = (
+export const transformImage = (
   originalImage: SkImage,
   targetImage: SharedValue<SkImage | null>,
   width: number,
@@ -132,7 +135,7 @@ const transformImage = (
       const newPixel = pixels[index];
 
       const monoColor =
-        newPixel > threshold ? Skia.Color("#faeed9") : Skia.Color("#000");
+        newPixel > threshold ? Skia.Color("#FFF") : Skia.Color("#000");
 
       paint.setColor(monoColor);
       canvas.drawRect(rect(x, y, 1, 1), paint);

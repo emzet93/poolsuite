@@ -14,6 +14,24 @@ export const PlayerVideo = React.memo(() => {
     require("@/assets/videos/poolsuite.mp4"),
     { paused: false, looping: true, volume: 0 },
   );
+  // const resultImage = useSharedValue<SkImage | null>(null);
+  //
+  // const iteration = useSharedValue(0);
+  //
+  // useAnimatedReaction(
+  //   () => {
+  //     return currentFrame.value;
+  //   },
+  //   (currentValue, previousValue) => {
+  //     if (currentValue && currentValue !== previousValue) {
+  //       if (iteration.value % 100 === 0) {
+  //         transformImage(currentValue, resultImage, stageWidth, stageHeight);
+  //       }
+  //
+  //       iteration.value += 1;
+  //     }
+  //   },
+  // );
 
   return (
     <Canvas

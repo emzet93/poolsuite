@@ -48,13 +48,12 @@ export const joinWaveformData = (arr: number[], m: number): number[] => {
 export const drawWaveform = (
   image: SharedValue<SkImage | null>,
   data: number[],
-  color: string,
 ) => {
   "worklet";
   const surface = Skia.Surface.MakeOffscreen(waveformWidth, waveformHeight)!;
   const canvas = surface.getCanvas();
   const paint = Skia.Paint();
-  paint.setColor(Skia.Color(color));
+  paint.setColor(Skia.Color("#FFF"));
 
   for (let barIndex = 0; barIndex < barsNumber; barIndex++) {
     const height = data[barIndex] / (barWidth + gap);
@@ -80,13 +79,12 @@ export const drawProgressBars = (
   image: SharedValue<SkImage | null>,
   data: number[],
   highlightedBars: number,
-  color: string,
 ) => {
   "worklet";
   const surface = Skia.Surface.MakeOffscreen(waveformWidth, waveformHeight)!;
   const canvas = surface.getCanvas();
   const paint = Skia.Paint();
-  paint.setColor(Skia.Color(color));
+  paint.setColor(Skia.Color("#FFF"));
 
   for (let barIndex = 0; barIndex < highlightedBars; barIndex++) {
     const height = data[barIndex];

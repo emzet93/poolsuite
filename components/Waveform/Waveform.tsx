@@ -1,9 +1,10 @@
-import { Canvas, SkImage, Image, Skia, rect } from "@shopify/react-native-skia";
+import { Canvas, SkImage, Image } from "@shopify/react-native-skia";
 import axios from "axios";
-import React, { FC, Fragment, useEffect, useRef, useState } from "react";
-import { SharedValue, runOnUI, useSharedValue } from "react-native-reanimated";
-import { UnistylesRuntime, useStyles } from "react-native-unistyles";
+import React, { FC, useEffect, useRef } from "react";
+import { runOnUI, useSharedValue } from "react-native-reanimated";
+import { useStyles } from "react-native-unistyles";
 
+import { ThemeFilter } from "@/components/Filters";
 import {
   barsNumber,
   drawProgressBars,
@@ -30,19 +31,17 @@ export const Waveform: FC<IProps> = React.memo(
     const progressImage = useSharedValue<SkImage | null>(null);
     const progress = useSharedValue(_progress);
     const duration = useSharedValue(_duration);
-    const color = useSharedValue(theme.colors.secondary);
     const waveformData = useSharedValue(placeholderData);
     const waveformUrlRef = useRef<string>();
 
     if (waveformUrl !== waveformUrlRef.current) {
       waveformUrlRef.current = waveformUrl;
       waveformData.value = placeholderData;
-      runOnUI(drawWaveform)(waveformImage, placeholderData, color.value);
+      runOnUI(drawWaveform)(waveformImage, placeholderData);
       runOnUI(drawProgressBars)(
         progressImage,
         placeholderData,
         Math.floor((progress.value * barsNumber) / duration.value),
-        color.value,
       );
     }
 
@@ -61,12 +60,11 @@ export const Waveform: FC<IProps> = React.memo(
             );
 
             waveformData.value = data;
-            runOnUI(drawWaveform)(waveformImage, data, color.value);
+            runOnUI(drawWaveform)(waveformImage, data);
             runOnUI(drawProgressBars)(
               progressImage,
               data,
               Math.floor((progress.value * barsNumber) / duration.value),
-              color.value,
             );
           }
         })
@@ -80,27 +78,11 @@ export const Waveform: FC<IProps> = React.memo(
     }, [
       waveformUrl,
       waveformImage,
-      color,
       waveformData,
       progressImage,
       progress,
       duration,
     ]);
-
-    if (color.value !== theme.colors.secondary) {
-      color.value = theme.colors.secondary;
-      runOnUI(drawWaveform)(
-        waveformImage,
-        waveformData.value,
-        theme.colors.secondary,
-      );
-      runOnUI(drawProgressBars)(
-        progressImage,
-        waveformData.value,
-        Math.floor((progress.value * barsNumber) / duration.value),
-        theme.colors.secondary,
-      );
-    }
 
     if (progress.value !== _progress || duration.value !== _duration) {
       progress.value = _progress;
@@ -109,7 +91,6 @@ export const Waveform: FC<IProps> = React.memo(
         progressImage,
         waveformData.value,
         Math.floor((_progress * barsNumber) / _duration),
-        color.value,
       );
     }
 
@@ -135,6 +116,7 @@ export const Waveform: FC<IProps> = React.memo(
           width={waveformWidth}
           height={waveformHeight}
         />
+        <ThemeFilter width={waveformWidth} height={waveformHeight} />
       </Canvas>
     );
   },
