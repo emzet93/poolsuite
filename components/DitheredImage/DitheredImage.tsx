@@ -17,9 +17,8 @@ interface IProps {
   image: SkImage | null | SharedValue<SkImage | null>; // Adjust the type if needed for your SkImage
 }
 
-const binaryShaderCode = `
+const ditheringShader = Skia.RuntimeEffect.Make(`
 uniform shader image;
-uniform float2 resolution;
 
 float getDitherValue(int2 p) {
   int index = p.y * 8 + p.x;
@@ -97,27 +96,23 @@ half dither(float2 xy, float grayscale) {
 }
 
 half4 main(float2 xy) {
-  float2 uv = xy / resolution;
-  half4 color = image.eval(uv * resolution);
+  half4 color = image.eval(xy);
   float grayscale = (color.r + color.g + color.b) / 3.0;
   float threshold = 0.75;
   float ditheredValue = dither(xy, grayscale);
   float binaryColor = ditheredValue > threshold ? 1.0 : 0.0;
   return half4(binaryColor, binaryColor, binaryColor, color.a);
 }
-`;
-
+`)!;
 export const DitheredImage: FC<IProps> = ({ width, height, image }) => {
-  const shader = Skia.RuntimeEffect.Make(binaryShaderCode)!;
-
-  if (!shader || !image) {
+  if (!ditheringShader || !image) {
     return null;
   }
 
   return (
     <Canvas style={{ width, height }}>
       <Fill>
-        <Shader source={shader} uniforms={{ resolution: [width, height] }}>
+        <Shader source={ditheringShader}>
           <ImageShader
             image={image}
             fit="cover"
