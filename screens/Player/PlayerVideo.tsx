@@ -11,7 +11,7 @@ export const PlayerVideo = React.memo(() => {
   const stageHeight = stageWidth;
 
   const { currentFrame } = useVideoFromAsset(
-    require("@/assets/videos/poolsuite.mp4"),
+    require("@/assets/videos/poolsuite2.mp4"),
     { paused: false, looping: true, volume: 0 },
   );
 

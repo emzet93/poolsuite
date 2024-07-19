@@ -100,7 +100,7 @@ half4 main(float2 xy) {
   float2 uv = xy / resolution;
   half4 color = image.eval(uv * resolution);
   float grayscale = (color.r + color.g + color.b) / 3.0;
-  float threshold = 1;
+  float threshold = 0.75;
   float ditheredValue = dither(xy, grayscale);
   float binaryColor = ditheredValue > threshold ? 1.0 : 0.0;
   return half4(binaryColor, binaryColor, binaryColor, color.a);
