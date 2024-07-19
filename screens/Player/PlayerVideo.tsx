@@ -1,8 +1,8 @@
-import { Canvas, Image } from "@shopify/react-native-skia";
 import React from "react";
+import { View } from "react-native";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
-import { RetroFilter } from "@/components/RetroFilter";
+import { DitheredImage } from "@/components/DitheredImage";
 import { useVideoFromAsset } from "@/hooks/useVideoFromAsset";
 
 export const PlayerVideo = React.memo(() => {
@@ -14,41 +14,19 @@ export const PlayerVideo = React.memo(() => {
     require("@/assets/videos/poolsuite.mp4"),
     { paused: false, looping: true, volume: 0 },
   );
-  // const resultImage = useSharedValue<SkImage | null>(null);
-  //
-  // const iteration = useSharedValue(0);
-  //
-  // useAnimatedReaction(
-  //   () => {
-  //     return currentFrame.value;
-  //   },
-  //   (currentValue, previousValue) => {
-  //     if (currentValue && currentValue !== previousValue) {
-  //       if (iteration.value % 100 === 0) {
-  //         transformImage(currentValue, resultImage, stageWidth, stageHeight);
-  //       }
-  //
-  //       iteration.value += 1;
-  //     }
-  //   },
-  // );
 
   return (
-    <Canvas
+    <View
       style={{
         width: stageWidth,
         height: stageHeight,
       }}
     >
-      <Image
+      <DitheredImage
         image={currentFrame}
-        fit="cover"
-        x={0}
-        y={0}
         width={stageWidth}
         height={stageHeight}
       />
-      <RetroFilter width={stageWidth} height={stageHeight} />
-    </Canvas>
+    </View>
   );
 });
