@@ -5,10 +5,8 @@ import {
   Turbulence,
 } from "@shopify/react-native-skia";
 import React, { FC, useMemo } from "react";
-import { Pressable, StyleProp, View } from "react-native";
-import { useStyles } from "react-native-unistyles";
 
-import { createColorMatrix } from "@/components/RetroFilter/utils";
+import { ThemeFilter } from "@/components/Filters";
 
 interface IProps {
   width: number;
@@ -20,11 +18,6 @@ const halftoneMatrix = [
 ];
 
 export const RetroFilter: FC<IProps> = ({ width, height }) => {
-  const { theme } = useStyles();
-  const themeColorMatrix = useMemo(() => {
-    return createColorMatrix(theme.colors.primary, theme.colors.secondary);
-  }, [theme]);
-
   return (
     <>
       <BackdropFilter
@@ -35,10 +28,7 @@ export const RetroFilter: FC<IProps> = ({ width, height }) => {
       <Rect x={0} y={0} width={width} height={height}>
         <Turbulence freqX={0.9} freqY={0.9} octaves={4} />
       </Rect>
-      <BackdropFilter
-        clip={{ x: 0, y: 0, width, height }}
-        filter={<ColorMatrix matrix={themeColorMatrix} />}
-      />
+      <ThemeFilter width={width} height={height} />
     </>
   );
 };

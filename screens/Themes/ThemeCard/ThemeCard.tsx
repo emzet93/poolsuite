@@ -1,11 +1,11 @@
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { Canvas, Image, useImage } from "@shopify/react-native-skia";
+import { useImage } from "@shopify/react-native-skia";
 import React, { FC } from "react";
 import { View } from "react-native";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
-import { RetroFilter } from "@/components/RetroFilter";
+import { PixelatedImage } from "@/components/PixelatedImage";
 import { Text } from "@/components/Text";
 import { Theme } from "@/theme/types";
 
@@ -34,17 +34,9 @@ export const ThemeCard: FC<IProps> = ({ theme, screenPadding, isSelected }) => {
         UnistylesRuntime.setTheme(theme.name);
       }}
     >
-      <Canvas style={styles.backgroundImage}>
-        <Image
-          image={image}
-          fit="cover"
-          x={0}
-          y={0}
-          width={cardWidth}
-          height={cardHeight}
-        />
-        <RetroFilter width={cardWidth} height={cardHeight} />
-      </Canvas>
+      <View style={styles.backgroundImage}>
+        <PixelatedImage width={cardWidth} height={cardHeight} image={image} />
+      </View>
       <View style={[styles.themeName, isSelected && styles.themeName_selected]}>
         {isSelected && (
           <Fontisto

@@ -1,8 +1,8 @@
-import { Canvas, Image } from "@shopify/react-native-skia";
 import React from "react";
+import { View } from "react-native";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
-import { RetroFilter } from "@/components/RetroFilter";
+import { DitheredImage } from "@/components/DitheredImage";
 import { useVideoFromAsset } from "@/hooks/useVideoFromAsset";
 
 export const PlayerVideo = React.memo(() => {
@@ -11,26 +11,22 @@ export const PlayerVideo = React.memo(() => {
   const stageHeight = stageWidth;
 
   const { currentFrame } = useVideoFromAsset(
-    require("@/assets/videos/poolsuite.mp4"),
+    require("@/assets/videos/poolsuite2.mp4"),
     { paused: false, looping: true, volume: 0 },
   );
 
   return (
-    <Canvas
+    <View
       style={{
         width: stageWidth,
         height: stageHeight,
       }}
     >
-      <Image
+      <DitheredImage
         image={currentFrame}
-        fit="cover"
-        x={0}
-        y={0}
         width={stageWidth}
         height={stageHeight}
       />
-      <RetroFilter width={stageWidth} height={stageHeight} />
-    </Canvas>
+    </View>
   );
 });
