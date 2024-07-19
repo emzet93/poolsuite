@@ -1,6 +1,6 @@
 import { createStyleSheet } from "react-native-unistyles";
 
-export const ThemeCardHeight = 80;
+export const ThemeCardHeight = 100;
 
 export const stylesheet = createStyleSheet((theme, runtime) => ({
   themeCard: {
