@@ -99,3 +99,4 @@ export const appThemes: AppThemes = {
 };
 
 export const appThemesList = Object.values(appThemes);
+export const defaultTheme = "Poolsuite FM";

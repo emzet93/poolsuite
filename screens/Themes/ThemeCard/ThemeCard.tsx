@@ -7,6 +7,7 @@ import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 import { Card } from "@/components/Card";
 import { RetroFilter } from "@/components/RetroFilter";
 import { Text } from "@/components/Text";
+import { changeTheme } from "@/theme";
 import { Theme } from "@/theme/types";
 
 import { stylesheet, ThemeCardHeight } from "./ThemeCard.style";
@@ -31,7 +32,7 @@ export const ThemeCard: FC<IProps> = ({ theme, screenPadding, isSelected }) => {
       style={styles.themeCardContent}
       shadowSize="big"
       onPress={() => {
-        UnistylesRuntime.setTheme(theme.name);
+        changeTheme(theme.name);
       }}
     >
       <Canvas style={styles.backgroundImage}>
