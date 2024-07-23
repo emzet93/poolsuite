@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
-import { PixelatedImage } from "@/components/PixelatedImage";
+import { DitheredImage } from "@/components/DitheredImage";
 import { Text } from "@/components/Text";
 import { Theme } from "@/theme/types";
 
@@ -35,7 +35,7 @@ export const ThemeCard: FC<IProps> = ({ theme, screenPadding, isSelected }) => {
       }}
     >
       <View style={styles.backgroundImage}>
-        <PixelatedImage width={cardWidth} height={cardHeight} image={image} />
+        <DitheredImage width={cardWidth} height={cardHeight} image={image} />
       </View>
       <View style={[styles.themeName, isSelected && styles.themeName_selected]}>
         {isSelected && (
