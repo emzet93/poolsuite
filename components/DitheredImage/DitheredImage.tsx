@@ -27,7 +27,7 @@ float bayer(float2 p) {
 
   if (x == 0 && y == 0) return 0.0 / 16.0;
   if (x == 1 && y == 0) return 8.0 / 16.0;
-  if (x == 2 && y == 0) return 2.0 / 16.0;
+  if (x == 2 && y == 0) return 8.0 / 16.0;
   if (x == 3 && y == 0) return 10.0 / 16.0;
 
   if (x == 0 && y == 1) return 12.0 / 16.0;
@@ -37,7 +37,7 @@ float bayer(float2 p) {
 
   if (x == 0 && y == 2) return 3.0 / 16.0;
   if (x == 1 && y == 2) return 11.0 / 16.0;
-  if (x == 2 && y == 2) return 1.0 / 16.0;
+  if (x == 2 && y == 2) return 6.0 / 16.0;
   if (x == 3 && y == 2) return 9.0 / 16.0;
 
   if (x == 0 && y == 3) return 15.0 / 16.0;
