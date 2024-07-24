@@ -1,7 +1,7 @@
 import {
   Canvas,
   Skia,
-  ImageShader,
+  Image,
   Shader,
   Fill,
   SkImage,
@@ -9,7 +9,7 @@ import {
 import { FC } from "react";
 import { SharedValue } from "react-native-reanimated";
 
-import { ThemeFilter } from "@/components/Filters";
+import { createColorMatrix, ThemeFilter } from "@/components/Filters";
 
 interface IProps {
   width: number;
@@ -58,6 +58,40 @@ half4 main(float2 xy) {
   return half4(binaryColor, binaryColor, binaryColor, color.a);
 }
 `)!;
+
+const imageFilter = Skia.ImageFilter.MakeRuntimeShader(
+  Skia.RuntimeShaderBuilder(ditheringShader),
+  null,
+  null,
+);
+const colorFilter = Skia.ColorFilter.MakeMatrix([
+  1,
+  0,
+  0,
+  0,
+  0, // Red channel: scale by 1
+  0,
+  0.41,
+  0,
+  0,
+  0, // Green channel: scale by 0.41 (105 / 255)
+  0,
+  0,
+  0.71,
+  0,
+  0, // Blue channel: scale by 0.71 (180 / 255)
+  0,
+  0,
+  0,
+  1,
+  0, // Alpha channel remains unchanged
+]);
+
+export const ditheredImagePaint = Skia.Paint();
+ditheredImagePaint.setImageFilter(imageFilter);
+ditheredImagePaint.setDither(false);
+ditheredImagePaint.setColorFilter(colorFilter);
+
 export const DitheredImage: FC<IProps> = ({ width, height, image }) => {
   if (!ditheringShader || !image) {
     return null;
@@ -65,20 +99,15 @@ export const DitheredImage: FC<IProps> = ({ width, height, image }) => {
 
   return (
     <Canvas style={{ width, height }}>
-      <Fill>
-        <Shader
-          source={ditheringShader}
-          uniforms={{
-            resolution: [width, height],
-          }}
-        >
-          <ImageShader
-            image={image}
-            fit="cover"
-            rect={{ x: 0, y: 0, width, height }}
-          />
-        </Shader>
-      </Fill>
+      <Image
+        image={image}
+        fit="cover"
+        width={width}
+        height={height}
+        x={0}
+        y={0}
+        paint={ditheredImagePaint}
+      />
       <ThemeFilter width={width} height={height} />
     </Canvas>
   );

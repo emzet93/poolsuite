@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import { Pressable, View } from "react-native";
-import { useStyles } from "react-native-unistyles";
+import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
 import { Text } from "@/components/Text";
 import { Waveform } from "@/components/Waveform";
-import { PlayerVideo } from "@/screens/Player/PlayerVideo";
+import { PlayerCamera } from "@/screens/Player/PlayerCamera";
 import { selectChannels, useLibraryStore } from "@/store/library";
 import {
   playChannel,
@@ -23,7 +23,7 @@ import {
 import { stylesheet } from "./Player.style";
 
 export const Player: FC = () => {
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
 
   const channels = useLibraryStore(selectChannels);
   const queue = usePlayerStore(selectQueue);
@@ -41,6 +41,9 @@ export const Player: FC = () => {
     playChannel(nextChannel || channels[0], true);
   };
 
+  const videoWidth = UnistylesRuntime.screen.width - theme.spacing.xs * 2;
+  const videoHeight = videoWidth;
+
   return (
     <View style={styles.container}>
       <Card
@@ -48,7 +51,7 @@ export const Player: FC = () => {
         style={styles.cameraCardContent}
         shadowSize="big"
       >
-        <PlayerVideo />
+        <PlayerCamera width={videoWidth} height={videoHeight} />
       </Card>
 
       <Card

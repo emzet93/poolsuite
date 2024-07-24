@@ -1,15 +1,15 @@
-import React from "react";
+import React, { FC } from "react";
 import { View } from "react-native";
-import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
 import { DitheredImage } from "@/components/DitheredImage";
 import { useVideoFromAsset } from "@/hooks/useVideoFromAsset";
 
-export const PlayerVideo = React.memo(() => {
-  const { theme } = useStyles();
-  const stageWidth = UnistylesRuntime.screen.width - theme.spacing.xs * 2;
-  const stageHeight = stageWidth;
+interface IProps {
+  width: number;
+  height: number;
+}
 
+export const PlayerVideo: FC<IProps> = React.memo(({ width, height }) => {
   const { currentFrame } = useVideoFromAsset(
     require("@/assets/videos/poolsuite2.mp4"),
     { paused: false, looping: true, volume: 0 },
@@ -18,15 +18,11 @@ export const PlayerVideo = React.memo(() => {
   return (
     <View
       style={{
-        width: stageWidth,
-        height: stageHeight,
+        width,
+        height,
       }}
     >
-      <DitheredImage
-        image={currentFrame}
-        width={stageWidth}
-        height={stageHeight}
-      />
+      <DitheredImage image={currentFrame} width={width} height={height} />
     </View>
   );
 });
