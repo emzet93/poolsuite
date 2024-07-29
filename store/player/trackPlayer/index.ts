@@ -1,4 +1,4 @@
-import TrackPlayerIOS from "track-player-ios";
+import TrackPlayerIOS from "react-native-track-player";
 
 import { Track } from "@/store/library/types";
 import { TrackPlayerService } from "@/store/player/trackPlayer/types";

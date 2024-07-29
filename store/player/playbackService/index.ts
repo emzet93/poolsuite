@@ -1,4 +1,8 @@
-import TrackPlayerIOS, { Capability, Event, State } from "track-player-ios";
+import TrackPlayerIOS, {
+  Capability,
+  Event,
+  State,
+} from "react-native-track-player";
 
 import {
   pause,
