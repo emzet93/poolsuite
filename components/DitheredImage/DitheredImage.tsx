@@ -1,114 +1,46 @@
 import {
   Canvas,
-  Skia,
-  Image,
   Shader,
   Fill,
   SkImage,
+  ImageShader,
 } from "@shopify/react-native-skia";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { SharedValue } from "react-native-reanimated";
+import { useStyles } from "react-native-unistyles";
 
-import { createColorMatrix, ThemeFilter } from "@/components/Filters";
+import { hexToRgbArray } from "../ImageFilters";
+import { ditheringShader } from "@/components/DitheredImage/utils";
 
 interface IProps {
-  width: number;
-  height: number;
+  width: number | SharedValue<number>;
+  height: number | SharedValue<number>;
   image: SkImage | null | SharedValue<SkImage | null>; // Adjust the type if needed for your SkImage
 }
 
-const ditheringShader = Skia.RuntimeEffect.Make(`
-uniform shader image;
-uniform float2 resolution;
-
-float bayer(float2 p) {
-  int x = int(mod(p.x, 4.0));
-  int y = int(mod(p.y, 4.0));
-
-  if (x == 0 && y == 0) return 0.0 / 16.0;
-  if (x == 1 && y == 0) return 8.0 / 16.0;
-  if (x == 2 && y == 0) return 8.0 / 16.0;
-  if (x == 3 && y == 0) return 10.0 / 16.0;
-
-  if (x == 0 && y == 1) return 12.0 / 16.0;
-  if (x == 1 && y == 1) return 4.0 / 16.0;
-  if (x == 2 && y == 1) return 14.0 / 16.0;
-  if (x == 3 && y == 1) return 6.0 / 16.0;
-
-  if (x == 0 && y == 2) return 3.0 / 16.0;
-  if (x == 1 && y == 2) return 11.0 / 16.0;
-  if (x == 2 && y == 2) return 6.0 / 16.0;
-  if (x == 3 && y == 2) return 9.0 / 16.0;
-
-  if (x == 0 && y == 3) return 15.0 / 16.0;
-  if (x == 1 && y == 3) return 7.0 / 16.0;
-  if (x == 2 && y == 3) return 13.0 / 16.0;
-  if (x == 3 && y == 3) return 5.0 / 16.0;
-
-  return 0.0;
-}
-
-half4 main(float2 xy) {
-  half4 color = image.eval(xy);
-  float grayscale = (color.r + color.g + color.b) / 3.0;
-
-  float threshold = bayer(xy);
-
-  float binaryColor = grayscale > threshold ? 1.0 : 0.0;
-  return half4(binaryColor, binaryColor, binaryColor, color.a);
-}
-`)!;
-
-const imageFilter = Skia.ImageFilter.MakeRuntimeShader(
-  Skia.RuntimeShaderBuilder(ditheringShader),
-  null,
-  null,
-);
-const colorFilter = Skia.ColorFilter.MakeMatrix([
-  1,
-  0,
-  0,
-  0,
-  0, // Red channel: scale by 1
-  0,
-  0.41,
-  0,
-  0,
-  0, // Green channel: scale by 0.41 (105 / 255)
-  0,
-  0,
-  0.71,
-  0,
-  0, // Blue channel: scale by 0.71 (180 / 255)
-  0,
-  0,
-  0,
-  1,
-  0, // Alpha channel remains unchanged
-]);
-
-export const ditheredImagePaint = Skia.Paint();
-ditheredImagePaint.setImageFilter(imageFilter);
-ditheredImagePaint.setDither(false);
-ditheredImagePaint.setColorFilter(colorFilter);
-
 export const DitheredImage: FC<IProps> = ({ width, height, image }) => {
-  if (!ditheringShader || !image) {
-    return null;
-  }
+  const { theme } = useStyles();
+
+  const uniforms = useMemo(
+    () => ({
+      primary: hexToRgbArray(theme.colors.primary),
+      secondary: hexToRgbArray(theme.colors.secondary),
+    }),
+    [theme.colors.primary, theme.colors.secondary],
+  );
 
   return (
-    <Canvas style={{ width, height }}>
-      <Image
-        image={image}
-        fit="cover"
-        width={width}
-        height={height}
-        x={0}
-        y={0}
-        paint={ditheredImagePaint}
-      />
-      <ThemeFilter width={width} height={height} />
+    <Canvas style={{ flex: 1 }}>
+      <Fill>
+        <Shader source={ditheringShader} uniforms={uniforms}>
+          <ImageShader
+            image={image}
+            fit="cover"
+            width={width}
+            height={height}
+          />
+        </Shader>
+      </Fill>
     </Canvas>
   );
 };

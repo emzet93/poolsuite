@@ -2,7 +2,7 @@ import { BackdropFilter, ColorMatrix } from "@shopify/react-native-skia";
 import React, { FC, useMemo } from "react";
 import { useStyles } from "react-native-unistyles";
 
-import { createColorMatrix } from "@/components/Filters/utils";
+import { createColorMatrix } from "@/components/ImageFilters/utils";
 
 interface IProps {
   width: number;
