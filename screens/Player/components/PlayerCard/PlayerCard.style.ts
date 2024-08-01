@@ -6,9 +6,17 @@ export const stylesheet = createStyleSheet((theme) => ({
   },
   playerCardContent: {
     flex: 1,
-    padding: theme.spacing.s,
+  },
+  channelInfo: {
+    paddingVertical: theme.spacing.s,
+    backgroundColor: theme.colors.primary,
     alignItems: "center",
+  },
+  content: {
+    flex: 1,
+    padding: theme.spacing.s,
     gap: theme.spacing.l,
+    alignItems: "center",
   },
   playerInfo: {
     alignItems: "center",

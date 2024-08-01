@@ -48,6 +48,15 @@ export const PlayerCard: FC<IProps> = () => {
       style={styles.playerCardContent}
       shadowSize="big"
     >
+      {queue && (
+        <View style={styles.channelInfo}>
+          <Pressable onPress={playNextChannel}>
+            <Text size="m" weight="bold" align="center" color="secondary">
+              {queue.channel?.name}
+            </Text>
+          </Pressable>
+        </View>
+      )}
       {currentTrack && (
         <Waveform
           waveformUrl={currentTrack.waveformUrl}
@@ -56,38 +65,35 @@ export const PlayerCard: FC<IProps> = () => {
         />
       )}
 
-      {queue && (
-        <>
-          <View style={styles.playerInfo}>
-            <Pressable onPress={playNextChannel}>
-              <Text size="l" weight="bold" align="center">
-                {queue.channel?.name}
+      <View style={styles.content}>
+        {queue && (
+          <>
+            <View style={styles.playerInfo}>
+              <Text align="center">{currentTrack?.title}</Text>
+            </View>
+
+            <View style={styles.playerControls}>
+              <Card style={styles.control} onPress={playPrevious}>
+                <Text>Prev</Text>
+              </Card>
+              <Card style={styles.control} onPress={togglePlay}>
+                <Text>{isPlaying ? "Pause" : "Play"}</Text>
+              </Card>
+              <Card style={styles.control} onPress={playNext}>
+                <Text>Next</Text>
+              </Card>
+            </View>
+
+            {currentTrack && (
+              <Text>
+                {`${Math.round(progress)} / ${Math.round(currentTrack?.durationMs / 1000)}`}
               </Text>
-            </Pressable>
-            <Text align="center">{currentTrack?.title}</Text>
-          </View>
+            )}
 
-          <View style={styles.playerControls}>
-            <Card style={styles.control} onPress={playPrevious}>
-              <Text>Prev</Text>
-            </Card>
-            <Card style={styles.control} onPress={togglePlay}>
-              <Text>{isPlaying ? "Pause" : "Play"}</Text>
-            </Card>
-            <Card style={styles.control} onPress={playNext}>
-              <Text>Next</Text>
-            </Card>
-          </View>
-
-          {currentTrack && (
-            <Text>
-              {`${Math.round(progress)} / ${Math.round(currentTrack?.durationMs / 1000)}`}
-            </Text>
-          )}
-
-          {isBuffering && <Text>Loading...</Text>}
-        </>
-      )}
+            {isBuffering && <Text>Loading...</Text>}
+          </>
+        )}
+      </View>
     </Card>
   );
 };
