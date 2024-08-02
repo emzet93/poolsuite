@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
+import { Lines } from "@/components/Lines";
 import { Noise } from "@/components/Noise";
 import { PlayerCamera } from "@/screens/Player/components/PlayerCamera";
 import { PlayerCard } from "@/screens/Player/components/PlayerCard";
@@ -23,6 +24,8 @@ export const Player: FC = () => {
         style={styles.cameraCardContent}
         shadowSize="big"
       >
+        <Lines style={styles.cardLines} />
+
         {showCamera ? (
           <PlayerCamera onExit={() => setShowCamera(false)} />
         ) : (

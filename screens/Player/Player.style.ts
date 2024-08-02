@@ -18,4 +18,7 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
   cameraCardContent: {
     flex: 1,
   },
+  cardLines: {
+    marginVertical: theme.spacing.xxs,
+  },
 }));

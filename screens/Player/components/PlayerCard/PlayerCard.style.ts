@@ -6,12 +6,29 @@ export const stylesheet = createStyleSheet((theme) => ({
   channelInfo: {
     paddingVertical: theme.spacing.s,
     backgroundColor: theme.colors.primary,
+    flexDirection: "row",
+    gap: theme.spacing.xxs,
+  },
+  channelAction: {
+    width: theme.spacing.xl * 2,
+    justifyContent: "center",
     alignItems: "center",
+  },
+  channelCardContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+  channelCard: {
+    paddingHorizontal: theme.spacing.s,
+    paddingVertical: theme.spacing.xs,
+  },
+  lines: {
+    marginTop: theme.spacing.xs,
   },
   content: {
     paddingHorizontal: theme.spacing.l,
-    paddingVertical: theme.spacing.s,
-    gap: theme.spacing.xs,
+    paddingVertical: theme.spacing.l,
+    gap: theme.spacing.xs * 1.5,
     justifyContent: "center",
     alignItems: "center",
   },
