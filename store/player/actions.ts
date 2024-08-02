@@ -2,6 +2,7 @@ import { Channel } from "@/store/library/types";
 
 import {
   selectActiveTrackIndex,
+  selectIsPlaying,
   selectNextTrack,
   selectPreviousTrack,
   selectProgress,
@@ -9,7 +10,10 @@ import {
 import { usePlayerStore } from "./store";
 import { TrackPlayer } from "./trackPlayer";
 
-export const playChannel = async (channel: Channel, shouldPlay = true) => {
+export const playChannel = async (channel: Channel, autoPlay = true) => {
+  const isPlaying = selectIsPlaying(usePlayerStore.getState());
+  const shouldPlay = autoPlay || isPlaying;
+
   usePlayerStore.setState({
     queue: {
       channel,
@@ -70,13 +74,17 @@ const onTrackChange = async () => {
   play();
 };
 
-export const playNext = async () => {
+export const playNext = async (autoPlay = true) => {
+  const isPlaying = selectIsPlaying(usePlayerStore.getState());
   const nextTrack = selectNextTrack(usePlayerStore.getState());
 
   if (nextTrack) {
     setActiveTrackId(nextTrack.id);
     await TrackPlayer.skipToNext(nextTrack);
-    onTrackChange();
+
+    if (isPlaying || autoPlay) {
+      onTrackChange();
+    }
   }
 };
 

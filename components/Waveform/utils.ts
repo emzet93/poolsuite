@@ -2,10 +2,14 @@ import { rect, Skia, SkImage } from "@shopify/react-native-skia";
 import { SharedValue } from "react-native-reanimated";
 import { UnistylesRuntime } from "react-native-unistyles";
 
+import { shadowSizeConfig } from "@/components/Card";
 import { defaultSpacing } from "@/theme";
 
 export const waveformWidth =
-  UnistylesRuntime.screen.width - defaultSpacing.xs * 2 - 4;
+  UnistylesRuntime.screen.width -
+  defaultSpacing.xs * 2 -
+  shadowSizeConfig.big -
+  1;
 export const waveformHeight = 40;
 
 export const barWidth = 1;

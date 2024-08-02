@@ -5,7 +5,7 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
     padding: theme.spacing.xs,
     paddingBottom: runtime.insets.bottom + theme.spacing.xs,
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: theme.colors.secondary,
     gap: theme.spacing.xs,
   },
@@ -13,7 +13,7 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     ...StyleSheet.absoluteFillObject,
   },
   cameraCard: {
-    flex: 1,
+    flexGrow: 1,
   },
   cameraCardContent: {
     flex: 1,

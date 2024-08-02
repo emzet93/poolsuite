@@ -1,3 +1,4 @@
+import Fontisto from "@expo/vector-icons/Fontisto";
 import React, { FC } from "react";
 import { Pressable, View } from "react-native";
 import { useStyles } from "react-native-unistyles";
@@ -12,25 +13,24 @@ import {
   playNext,
   playPrevious,
   selectActiveTrack,
-  selectIsBuffering,
   selectIsPlaying,
   selectProgress,
   selectQueue,
   togglePlay,
   usePlayerStore,
 } from "@/store/player";
+import { formatDuration } from "@/utils/dateTime";
 
-import { stylesheet } from "./PlayerCard.style";
+import { ControlArrowSize, stylesheet } from "./PlayerCard.style";
 
 interface IProps {}
 
 export const PlayerCard: FC<IProps> = () => {
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
   const channels = useLibraryStore(selectChannels);
   const queue = usePlayerStore(selectQueue);
   const currentTrack = usePlayerStore(selectActiveTrack);
   const isPlaying = usePlayerStore(selectIsPlaying);
-  const isBuffering = usePlayerStore(selectIsBuffering);
   const progress = usePlayerStore(selectProgress);
 
   const playNextChannel = () => {
@@ -43,11 +43,7 @@ export const PlayerCard: FC<IProps> = () => {
   };
 
   return (
-    <Card
-      containerStyle={styles.playerCard}
-      style={styles.playerCardContent}
-      shadowSize="big"
-    >
+    <Card shadowSize="big">
       {queue && (
         <View style={styles.channelInfo}>
           <Pressable onPress={playNextChannel}>
@@ -66,8 +62,12 @@ export const PlayerCard: FC<IProps> = () => {
       )}
 
       <View style={styles.content}>
-        {queue && (
+        {currentTrack && (
           <>
+            <Text size="s">
+              {`${formatDuration(progress)}  /  ${formatDuration(currentTrack?.durationMs / 1000)}`}
+            </Text>
+
             <View style={styles.playerInfo}>
               <Text align="center" size="m">
                 {currentTrack?.title}
@@ -75,24 +75,43 @@ export const PlayerCard: FC<IProps> = () => {
             </View>
 
             <View style={styles.playerControls}>
-              <Card style={styles.control} onPress={playPrevious}>
-                <Text>Prev</Text>
+              <Card
+                containerStyle={styles.controlContainer}
+                style={[styles.control, styles.leftControl]}
+                onPress={playPrevious}
+              >
+                <Fontisto
+                  name="step-backwrad"
+                  size={ControlArrowSize}
+                  color={theme.colors.primary}
+                />
               </Card>
-              <Card style={styles.control} onPress={togglePlay}>
-                <Text>{isPlaying ? "Pause" : "Play"}</Text>
+              <Card
+                containerStyle={[
+                  styles.controlContainer,
+                  styles.middleControlContainer,
+                ]}
+                style={[styles.control, styles.middleControl]}
+                onPress={togglePlay}
+              >
+                <Fontisto
+                  name={isPlaying ? "pause" : "play"}
+                  size={ControlArrowSize}
+                  color={theme.colors.primary}
+                />
               </Card>
-              <Card style={styles.control} onPress={playNext}>
-                <Text>Next</Text>
+              <Card
+                containerStyle={styles.controlContainer}
+                style={[styles.control, styles.rightControl]}
+                onPress={() => playNext()}
+              >
+                <Fontisto
+                  name="step-forward"
+                  size={ControlArrowSize}
+                  color={theme.colors.primary}
+                />
               </Card>
             </View>
-
-            {currentTrack && (
-              <Text>
-                {`${Math.round(progress)} / ${Math.round(currentTrack?.durationMs / 1000)}`}
-              </Text>
-            )}
-
-            {isBuffering && <Text>Loading...</Text>}
           </>
         )}
       </View>

@@ -29,7 +29,6 @@ export const Player: FC = () => {
           <PlayerVideo openCamera={() => setShowCamera(true)} />
         )}
       </Card>
-
       <PlayerCard />
     </View>
   );

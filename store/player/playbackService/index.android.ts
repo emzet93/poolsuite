@@ -61,7 +61,7 @@ const remotePlayerService = () => async () => {
   TrackPlayerAndroid.addEventListener(Event.PlaybackError, (event) => {
     console.log("Playback error", event);
     // TODO: check online status
-    playNext();
+    playNext(false);
   });
   TrackPlayerAndroid.addEventListener(Event.PlaybackState, async (event) => {
     setIsBuffering([State.Buffering, State.Loading].includes(event.state));

@@ -1,21 +1,17 @@
 import { createStyleSheet } from "react-native-unistyles";
 
+export const ControlArrowSize = 8;
+
 export const stylesheet = createStyleSheet((theme) => ({
-  playerCard: {
-    flex: 1,
-  },
-  playerCardContent: {
-    flex: 1,
-  },
   channelInfo: {
     paddingVertical: theme.spacing.s,
     backgroundColor: theme.colors.primary,
     alignItems: "center",
   },
   content: {
-    flex: 1,
-    padding: theme.spacing.s,
-    gap: theme.spacing.l,
+    paddingHorizontal: theme.spacing.l,
+    paddingVertical: theme.spacing.s,
+    gap: theme.spacing.xs,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -24,13 +20,30 @@ export const stylesheet = createStyleSheet((theme) => ({
     gap: theme.spacing.xxs,
   },
   playerControls: {
+    alignSelf: "stretch",
     flexDirection: "row",
   },
+  controlContainer: {
+    flex: 1,
+  },
+  middleControlContainer: {
+    marginHorizontal: -5,
+  },
   control: {
-    padding: theme.spacing.m,
-    minWidth: 80,
+    paddingVertical: theme.spacing.l,
     justifyContent: "center",
     alignItems: "center",
+  },
+  leftControl: {
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  middleControl: {
+    borderRadius: 0,
+  },
+  rightControl: {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
   noise: {
     flex: 0,
