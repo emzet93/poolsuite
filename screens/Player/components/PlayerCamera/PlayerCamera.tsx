@@ -40,7 +40,7 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   ]);
 
   useEffect(() => {
-    if (permission === "not-determined") {
+    if (permission !== "granted") {
       requestPermission();
     }
   }, [permission, requestPermission]);
