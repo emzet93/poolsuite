@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
 
 export const stylesheet = createStyleSheet((theme) => ({
@@ -6,6 +7,24 @@ export const stylesheet = createStyleSheet((theme) => ({
   },
   camera: {
     flex: 1,
+  },
+  permissionDeniedContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: theme.spacing.xs,
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: "15%",
+  },
+  permissionsHeader: {
+    backgroundColor: theme.colors.secondary,
+    padding: theme.spacing.xxs / 2,
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: theme.colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonsContainer: {
     position: "absolute",

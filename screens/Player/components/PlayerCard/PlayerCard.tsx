@@ -69,7 +69,9 @@ export const PlayerCard: FC<IProps> = () => {
         {queue && (
           <>
             <View style={styles.playerInfo}>
-              <Text align="center">{currentTrack?.title}</Text>
+              <Text align="center" size="m">
+                {currentTrack?.title}
+              </Text>
             </View>
 
             <View style={styles.playerControls}>

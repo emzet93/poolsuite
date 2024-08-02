@@ -6,7 +6,6 @@ import {
   CameraPosition,
   useCameraDevice,
   useCameraFormat,
-  useCameraPermission,
   useSkiaFrameProcessor,
 } from "react-native-vision-camera";
 
@@ -17,20 +16,19 @@ import { isIOS } from "@/utils/device";
 
 import { cameraResolution } from "./constants";
 import { stylesheet } from "./PlayerCamera.style";
+import { useCameraPermission } from "./useCameraPermission";
 
 interface IProps {
   onExit: () => void;
 }
 
-// TODO: handle permissions
 // TODO2: nice ui for camera loading
 export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
 
   const [cameraPosition, setCameraPosition] = useState<CameraPosition>("back");
   const device = useCameraDevice(cameraPosition);
-  const { hasPermission, requestPermission } = useCameraPermission();
-  const { theme } = useStyles();
+  const { permission, requestPermission } = useCameraPermission();
 
   const switchCamera = () =>
     setCameraPosition((p) => (p === "front" ? "back" : "front"));
@@ -40,10 +38,10 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   ]);
 
   useEffect(() => {
-    if (!hasPermission) {
+    if (permission === "not-determined") {
       requestPermission();
     }
-  }, [hasPermission, requestPermission]);
+  }, [permission, requestPermission]);
 
   const frameProcessor = useSkiaFrameProcessor(
     (frame) => {
@@ -57,7 +55,24 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
 
   return (
     <View style={styles.container}>
-      {hasPermission && device && (
+      <View style={styles.loadingContainer}>
+        <Text color="secondary" weight="bold">
+          Loading...
+        </Text>
+      </View>
+
+      {(permission === "denied" || permission === "restricted") && (
+        <View style={styles.permissionDeniedContainer}>
+          <View style={styles.permissionsHeader}>
+            <Text weight="bold">CAMERA ERROR</Text>
+          </View>
+          <Text weight="bold" align="center" color="secondary">
+            Please open settings and give Poolsuite FM access to your camera
+          </Text>
+        </View>
+      )}
+
+      {permission === "granted" && device && (
         <Camera
           style={styles.camera}
           device={device}
@@ -67,12 +82,15 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
           format={isIOS ? format : undefined}
         />
       )}
+
       <View style={styles.buttonsContainer}>
-        <Card style={styles.iconButton} onPress={switchCamera} inverted>
-          <Text size="xs" weight="bold" color="secondary">
-            Switch
-          </Text>
-        </Card>
+        {permission === "granted" && (
+          <Card style={styles.iconButton} onPress={switchCamera} inverted>
+            <Text size="xs" weight="bold" color="secondary">
+              Switch
+            </Text>
+          </Card>
+        )}
         <Card style={styles.button} onPress={onExit}>
           <Text size="m" weight="bold" align="center">
             Exit
