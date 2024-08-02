@@ -23,7 +23,6 @@ interface IProps {
   onExit: () => void;
 }
 
-// TODO2: nice ui for camera loading
 export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   const { styles, theme } = useStyles(stylesheet);
 
@@ -57,7 +56,7 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
 
   return (
     <View style={styles.container}>
-      {!isPreviewStarted && <Noise style={styles.loadingContainer} />}
+      {!isPreviewStarted && <Noise style={styles.loadingContainer} animated />}
 
       {(permission === "denied" || permission === "restricted") && (
         <View style={styles.permissionDeniedContainer}>
@@ -78,7 +77,11 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
           isActive
           resizeMode="cover"
           format={isIOS ? format : undefined}
-          onStarted={() => setIsPreviewStarted(true)}
+          onStarted={() => {
+            setTimeout(() => {
+              setIsPreviewStarted(true);
+            }, 1000);
+          }}
         />
       )}
 

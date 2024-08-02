@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
 
 export const stylesheet = createStyleSheet((theme, runtime) => ({
@@ -7,5 +8,8 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     flex: 1,
     backgroundColor: theme.colors.secondary,
     gap: theme.spacing.l,
+  },
+  background: {
+    ...StyleSheet.absoluteFillObject,
   },
 }));

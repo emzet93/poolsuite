@@ -16,6 +16,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
     padding: theme.spacing.s,
     gap: theme.spacing.l,
+    justifyContent: "center",
     alignItems: "center",
   },
   playerInfo: {
@@ -30,5 +31,9 @@ export const stylesheet = createStyleSheet((theme) => ({
     minWidth: 80,
     justifyContent: "center",
     alignItems: "center",
+  },
+  noise: {
+    flex: 0,
+    height: theme.spacing.s,
   },
 }));

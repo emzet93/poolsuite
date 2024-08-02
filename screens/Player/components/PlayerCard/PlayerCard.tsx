@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { Pressable, StyleProp, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { Pressable, View } from "react-native";
 import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
+import { Noise } from "@/components/Noise";
 import { Text } from "@/components/Text";
 import { Waveform } from "@/components/Waveform";
 import { selectChannels, useLibraryStore } from "@/store/library";
@@ -96,6 +96,8 @@ export const PlayerCard: FC<IProps> = () => {
           </>
         )}
       </View>
+
+      <Noise style={styles.noise} density={0.18} frequency={0.5} />
     </Card>
   );
 };
