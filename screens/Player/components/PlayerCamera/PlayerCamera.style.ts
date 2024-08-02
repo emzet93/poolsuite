@@ -5,8 +5,8 @@ export const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
   },
-  camera: {
-    flex: 1,
+  loadingContainer: {
+    ...StyleSheet.absoluteFillObject,
   },
   permissionDeniedContainer: {
     flex: 1,
@@ -20,11 +20,8 @@ export const stylesheet = createStyleSheet((theme) => ({
     backgroundColor: theme.colors.secondary,
     padding: theme.spacing.xxs / 2,
   },
-  loadingContainer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: theme.colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
+  camera: {
+    flex: 1,
   },
   buttonsContainer: {
     position: "absolute",

@@ -11,6 +11,7 @@ import {
 
 import { Card } from "@/components/Card";
 import { getDitheredImagePaint } from "@/components/DitheredImage/utils";
+import { Noise } from "@/components/Noise";
 import { Text } from "@/components/Text";
 import { isIOS } from "@/utils/device";
 
@@ -29,6 +30,7 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   const [cameraPosition, setCameraPosition] = useState<CameraPosition>("back");
   const device = useCameraDevice(cameraPosition);
   const { permission, requestPermission } = useCameraPermission();
+  const [isPreviewStarted, setIsPreviewStarted] = useState(false);
 
   const switchCamera = () =>
     setCameraPosition((p) => (p === "front" ? "back" : "front"));
@@ -55,11 +57,7 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.loadingContainer}>
-        <Text color="secondary" weight="bold">
-          Loading...
-        </Text>
-      </View>
+      {!isPreviewStarted && <Noise style={styles.loadingContainer} />}
 
       {(permission === "denied" || permission === "restricted") && (
         <View style={styles.permissionDeniedContainer}>
@@ -80,6 +78,7 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
           isActive
           resizeMode="cover"
           format={isIOS ? format : undefined}
+          onStarted={() => setIsPreviewStarted(true)}
         />
       )}
 

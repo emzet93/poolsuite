@@ -5,11 +5,10 @@ import {
   SkImage,
   ImageShader,
 } from "@shopify/react-native-skia";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { SharedValue } from "react-native-reanimated";
-import { useStyles } from "react-native-unistyles";
 
-import { hexToRgbArray } from "../ImageFilters";
+import { useThemeUniforms } from "../ImageFilters";
 import { ditheringShader } from "@/components/DitheredImage/utils";
 
 interface IProps {
@@ -19,15 +18,7 @@ interface IProps {
 }
 
 export const DitheredImage: FC<IProps> = ({ width, height, image }) => {
-  const { theme } = useStyles();
-
-  const uniforms = useMemo(
-    () => ({
-      primary: hexToRgbArray(theme.colors.primary),
-      secondary: hexToRgbArray(theme.colors.secondary),
-    }),
-    [theme.colors.primary, theme.colors.secondary],
-  );
+  const uniforms = useThemeUniforms();
 
   return (
     <Canvas style={{ flex: 1 }}>
