@@ -4,7 +4,7 @@ import React, { FC, useEffect, useRef } from "react";
 import { runOnUI, useSharedValue } from "react-native-reanimated";
 import { useStyles } from "react-native-unistyles";
 
-import { ThemeFilter } from "@/components/Filters";
+import { ThemeFilter } from "../ImageFilters";
 import {
   barsNumber,
   drawProgressBars,

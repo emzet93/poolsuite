@@ -10,7 +10,9 @@ export const fetchChannels = async (): Promise<Channel[]> => {
   return data.payload.map((channel: any) => ({
     id: channel.slug,
     url: channel.url,
-    name: channel.name,
+    name: channel.name.toLowerCase().includes("poolsuite fm")
+      ? "Poolsuite FM"
+      : channel.name,
     slug: channel.slug,
     order: channel.order,
     totalTracks: channel.total_tracks,

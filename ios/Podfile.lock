@@ -225,6 +225,9 @@ PODS:
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
+  - ExpoMediaLibrary (16.0.4):
+    - ExpoModulesCore
+    - React-Core
   - ExpoModulesCore (1.12.19):
     - DoubleConversion
     - glog
@@ -1284,6 +1287,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-worklets-core (1.3.3):
+    - React
+    - React-callinvoker
+    - React-Core
   - React-nativeconfig (0.74.3)
   - React-NativeModulesApple (0.74.3):
     - glog
@@ -1579,6 +1586,18 @@ PODS:
     - Yoga
   - SocketRocket (0.7.0)
   - SwiftAudioEx (0.15.3)
+  - VisionCamera (4.5.1):
+    - VisionCamera/Core (= 4.5.1)
+    - VisionCamera/FrameProcessors (= 4.5.1)
+    - VisionCamera/React (= 4.5.1)
+  - VisionCamera/Core (4.5.1)
+  - VisionCamera/FrameProcessors (4.5.1):
+    - React
+    - React-callinvoker
+    - react-native-worklets-core
+  - VisionCamera/React (4.5.1):
+    - React-Core
+    - VisionCamera/FrameProcessors
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1597,6 +1616,7 @@ DEPENDENCIES:
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoHead (from `../node_modules/expo-router/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
+  - ExpoMediaLibrary (from `../node_modules/expo-media-library/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
@@ -1637,6 +1657,7 @@ DEPENDENCIES:
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-track-player (from `../node_modules/react-native-track-player`)
   - react-native-unistyles (from `../node_modules/react-native-unistyles`)
+  - react-native-worklets-core (from `../node_modules/react-native-worklets-core`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1663,6 +1684,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1703,6 +1725,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-router/ios"
   ExpoKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
+  ExpoMediaLibrary:
+    :path: "../node_modules/expo-media-library/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
   ExpoSystemUI:
@@ -1780,6 +1804,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-track-player"
   react-native-unistyles:
     :path: "../node_modules/react-native-unistyles"
+  react-native-worklets-core:
+    :path: "../node_modules/react-native-worklets-core"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1832,6 +1858,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1851,6 +1879,7 @@ SPEC CHECKSUMS:
   ExpoFont: e7f2275c10ca8573c991e007329ad6bf98086485
   ExpoHead: 7880300d9c1519420530cf591d333d3f96ff9f6e
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
+  ExpoMediaLibrary: 250bf2659264163e428da5f867493b4cccd35ef9
   ExpoModulesCore: 734c1802786b23c9598f4d15273753a779969368
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
@@ -1891,6 +1920,7 @@ SPEC CHECKSUMS:
   react-native-skia: 4008bb2e4923ead4b8be7d17326840ba9c8b46f4
   react-native-track-player: 0c26d981b5097910486cbbeb6d8f5352d41be069
   react-native-unistyles: a36bb974db121ec16e129b7991a51f04fa1bd7f8
+  react-native-worklets-core: f51430dd07bf5343d4918d28a4bb00fe8f98b982
   React-nativeconfig: fa5de9d8f4dbd5917358f8ad3ad1e08762f01dcb
   React-NativeModulesApple: 585d1b78e0597de364d259cb56007052d0bda5e5
   React-perflogger: 7bb9ba49435ff66b666e7966ee10082508a203e8
@@ -1919,6 +1949,7 @@ SPEC CHECKSUMS:
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SwiftAudioEx: 83eabba2940924fc1c0d5cb0896049921365229c
+  VisionCamera: b0bf2df4e845825f03e04c025c9b8283a9c61bf7
   Yoga: 88480008ccacea6301ff7bf58726e27a72931c8d
 
 PODFILE CHECKSUM: d968e2a89aa56f95e0606b09d3e1f56b61594a3a

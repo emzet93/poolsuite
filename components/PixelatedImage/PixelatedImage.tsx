@@ -2,7 +2,7 @@ import { Canvas, Image, rect, Skia, SkImage } from "@shopify/react-native-skia";
 import { FC } from "react";
 import { runOnUI, SharedValue, useSharedValue } from "react-native-reanimated";
 
-import { ThemeFilter } from "@/components/Filters";
+import { ThemeFilter } from "../ImageFilters";
 
 interface IProps {
   width: number;
