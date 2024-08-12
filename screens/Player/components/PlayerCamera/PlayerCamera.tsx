@@ -1,4 +1,7 @@
-import React, { FC, useEffect, useState } from "react";
+import { makeImageFromView } from "@shopify/react-native-skia";
+import * as FileSystem from "expo-file-system";
+import { createAssetAsync, requestPermissionsAsync } from "expo-media-library";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { useStyles } from "react-native-unistyles";
 import {
@@ -13,6 +16,7 @@ import { Card } from "@/components/Card";
 import { getDitheredImagePaint } from "@/components/DitheredImage/utils";
 import { Noise } from "@/components/Noise";
 import { Text } from "@/components/Text";
+import { CameraError } from "@/screens/Player/components/CameraError";
 import { isIOS } from "@/utils/device";
 
 import { cameraResolution } from "./constants";
@@ -26,9 +30,15 @@ interface IProps {
 export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   const { styles, theme } = useStyles(stylesheet);
 
+  const cameraRef = useRef<Camera | null>(null);
   const [cameraPosition, setCameraPosition] = useState<CameraPosition>("back");
   const device = useCameraDevice(cameraPosition);
-  const { permission, requestPermission } = useCameraPermission();
+  const {
+    permission: cameraPermission,
+    requestPermission: requestCameraPermission,
+    isRequestingPermission: isRequestingCamera,
+  } = useCameraPermission();
+  const [libraryPermissionError, setLibraryPermissionError] = useState(false);
   const [isPreviewStarted, setIsPreviewStarted] = useState(false);
 
   const switchCamera = () =>
@@ -39,10 +49,8 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   ]);
 
   useEffect(() => {
-    if (permission !== "granted") {
-      requestPermission();
-    }
-  }, [permission, requestPermission]);
+    requestCameraPermission();
+  }, [requestCameraPermission]);
 
   const frameProcessor = useSkiaFrameProcessor(
     (frame) => {
@@ -54,23 +62,55 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
     [theme.colors.primary, theme.colors.secondary, getDitheredImagePaint],
   );
 
+  const onTakePhoto = async () => {
+    try {
+      const libraryPermission = await requestPermissionsAsync();
+
+      if (libraryPermission.status !== "granted") {
+        setLibraryPermissionError(true);
+        return;
+      }
+
+      const snapshot = await makeImageFromView(cameraRef);
+      // TODO: Draw on off screen canvas together with other elements
+
+      if (snapshot) {
+        const fileUri = `${FileSystem.documentDirectory}poolsuite-photo.png`;
+
+        await FileSystem.writeAsStringAsync(
+          fileUri,
+          snapshot.encodeToBase64(),
+          {
+            encoding: FileSystem.EncodingType.Base64,
+          },
+        );
+
+        await createAssetAsync(fileUri);
+      }
+    } catch (error) {
+      console.error("Error saving file:", error);
+    }
+  };
+
+  const showCamera = cameraPermission === "granted" && device;
+  const showCameraButtons = showCamera && !libraryPermissionError;
+
   return (
     <View style={styles.container}>
       {!isPreviewStarted && <Noise style={styles.loadingContainer} animated />}
 
-      {(permission === "denied" || permission === "restricted") && (
-        <View style={styles.permissionDeniedContainer}>
-          <View style={styles.permissionsHeader}>
-            <Text weight="bold">CAMERA ERROR</Text>
-          </View>
-          <Text weight="bold" align="center" color="secondary">
-            Please open settings and give Poolsuite FM access to your camera
-          </Text>
-        </View>
+      {(cameraPermission === "denied" || cameraPermission === "restricted") &&
+        !isRequestingCamera && (
+          <CameraError message="Please open settings and give Poolsuite FM access to your camera" />
+        )}
+
+      {showCamera && libraryPermissionError && (
+        <CameraError message="Please open settings and give Poolsuite FM access to your photos" />
       )}
 
-      {permission === "granted" && device && (
+      {showCamera && !libraryPermissionError && (
         <Camera
+          ref={cameraRef}
           style={styles.camera}
           device={device}
           frameProcessor={frameProcessor}
@@ -86,7 +126,14 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
       )}
 
       <View style={styles.buttonsContainer}>
-        {permission === "granted" && (
+        {showCameraButtons && (
+          <Card style={styles.iconButton} onPress={onTakePhoto} inverted>
+            <Text size="xs" weight="bold" color="secondary">
+              Photo
+            </Text>
+          </Card>
+        )}
+        {showCameraButtons && (
           <Card style={styles.iconButton} onPress={switchCamera} inverted>
             <Text size="xs" weight="bold" color="secondary">
               Switch

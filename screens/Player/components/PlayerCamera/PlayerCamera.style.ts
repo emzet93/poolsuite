@@ -8,18 +8,6 @@ export const stylesheet = createStyleSheet((theme) => ({
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
   },
-  permissionDeniedContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: theme.spacing.xs,
-    backgroundColor: theme.colors.primary,
-    paddingHorizontal: "15%",
-  },
-  permissionsHeader: {
-    backgroundColor: theme.colors.secondary,
-    padding: theme.spacing.xxs / 2,
-  },
   camera: {
     flex: 1,
   },

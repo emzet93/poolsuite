@@ -1,0 +1,1 @@
+export { CameraError } from "./CameraError";

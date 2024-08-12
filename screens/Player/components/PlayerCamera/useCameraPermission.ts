@@ -3,13 +3,20 @@ import { AppState } from "react-native";
 import { Camera } from "react-native-vision-camera";
 
 export const useCameraPermission = () => {
+  const [isRequestingPermission, setIsRequestingPermission] = useState(false);
   const [permission, setPermission] = useState(() =>
     Camera.getCameraPermissionStatus(),
   );
 
   const requestPermission = useCallback(async () => {
+    if (Camera.getCameraPermissionStatus() === "granted") {
+      return;
+    }
+
+    setIsRequestingPermission(true);
     const newPermission = await Camera.requestCameraPermission();
     setPermission(newPermission);
+    setIsRequestingPermission(false);
   }, []);
 
   useEffect(() => {
@@ -24,7 +31,8 @@ export const useCameraPermission = () => {
     () => ({
       permission,
       requestPermission,
+      isRequestingPermission,
     }),
-    [permission, requestPermission],
+    [permission, requestPermission, isRequestingPermission],
   );
 };

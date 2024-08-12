@@ -10,7 +10,7 @@ import {
 import { usePlayerStore } from "./store";
 import { TrackPlayer } from "./trackPlayer";
 
-export const playChannel = async (channel: Channel, autoPlay = true) => {
+export const playChannel = async (channel: Channel, autoPlay = false) => {
   const isPlaying = selectIsPlaying(usePlayerStore.getState());
   const shouldPlay = autoPlay || isPlaying;
 
