@@ -64,7 +64,7 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
 
   const onTakePhoto = async () => {
     try {
-      const libraryPermission = await requestPermissionsAsync();
+      const libraryPermission = await requestPermissionsAsync(false, ["photo"]);
 
       if (libraryPermission.status !== "granted") {
         setLibraryPermissionError(true);
