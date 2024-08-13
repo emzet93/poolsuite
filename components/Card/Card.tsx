@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import { Pressable, PressableProps, StyleProp, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -8,11 +8,15 @@ import { useStyles } from "react-native-unistyles";
 
 import { stylesheet, shadowSizeConfig } from "./Card.style";
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-interface Props extends PressableProps {
+interface Props
+  extends Pick<
+    PressableProps,
+    "onPress" | "onPressIn" | "onPressOut" | "disabled"
+  > {
   inverted?: boolean;
   containerStyle?: StyleProp<any>;
+  style?: StyleProp<any>;
+  children?: ReactNode;
   shadowSize?: "small" | "big";
 }
 
@@ -39,7 +43,17 @@ export const Card: FC<Props> = ({
   }, [shadowSize]);
 
   return (
-    <View style={[styles.container(shadowSize), containerStyle]}>
+    <Pressable
+      disabled={disabled || !onPress}
+      onPressIn={() => (isPressed.value = true)}
+      onPressOut={() => (isPressed.value = false)}
+      onPress={(event) => {
+        onPress?.(event);
+        isPressed.value = false;
+      }}
+      {...props}
+      style={[styles.container(shadowSize), containerStyle]}
+    >
       <View
         style={[
           styles.shadow,
@@ -54,15 +68,7 @@ export const Card: FC<Props> = ({
           inverted && styles.shadow_inverted,
         ]}
       />
-      <AnimatedPressable
-        disabled={disabled || !onPress}
-        onPressIn={() => (isPressed.value = true)}
-        onPressOut={() => (isPressed.value = false)}
-        onPress={(event) => {
-          onPress?.(event);
-          isPressed.value = false;
-        }}
-        {...props}
+      <Animated.View
         style={[
           styles.card,
           inverted && styles.card_inverted,
@@ -71,7 +77,7 @@ export const Card: FC<Props> = ({
         ]}
       >
         {children}
-      </AnimatedPressable>
-    </View>
+      </Animated.View>
+    </Pressable>
   );
 };

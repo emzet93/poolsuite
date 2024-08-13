@@ -1,13 +1,15 @@
 import Fontisto from "@expo/vector-icons/Fontisto";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Pressable, View } from "react-native";
 import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
 import { Lines } from "@/components/Lines";
+import { Modal } from "@/components/Modal";
 import { Noise } from "@/components/Noise";
 import { Text } from "@/components/Text";
 import { Waveform } from "@/components/Waveform";
+import { ChannelsList } from "@/screens/Player/components/ChannelsList";
 import { selectChannels, useLibraryStore } from "@/store/library";
 import {
   playChannel,
@@ -28,6 +30,9 @@ interface IProps {}
 
 export const PlayerCard: FC<IProps> = () => {
   const { styles, theme } = useStyles(stylesheet);
+  const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
+  const toggleChannelsModal = () => setIsChannelsModalOpen((v) => !v);
+
   const channels = useLibraryStore(selectChannels);
   const queue = usePlayerStore(selectQueue);
   const currentTrack = usePlayerStore(selectActiveTrack);
@@ -65,7 +70,13 @@ export const PlayerCard: FC<IProps> = () => {
           </Pressable>
 
           <View style={styles.channelCardContainer}>
-            <Card onPress={() => {}} inverted style={styles.channelCard}>
+            <Card
+              onPress={() => {
+                requestAnimationFrame(toggleChannelsModal);
+              }}
+              inverted
+              style={styles.channelCard}
+            >
               <Text size="m" weight="bold" align="center" color="secondary">
                 <Text size="l" align="center" color="secondary">
                   {"Channel: "}
@@ -152,6 +163,15 @@ export const PlayerCard: FC<IProps> = () => {
       )}
 
       <Noise style={styles.noise} density={0.18} frequency={0.5} />
+
+      <Modal isOpen={isChannelsModalOpen} onClose={toggleChannelsModal}>
+        <ChannelsList
+          channels={channels}
+          onChannelPress={playChannel}
+          activeChannelId={queue?.channel.id}
+          onClose={toggleChannelsModal}
+        />
+      </Modal>
     </Card>
   );
 };
