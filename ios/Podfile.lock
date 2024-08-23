@@ -6,18 +6,18 @@ PODS:
   - EXJSONUtils (0.13.1)
   - EXManifests (0.14.3):
     - ExpoModulesCore
-  - Expo (51.0.22):
+  - Expo (51.0.30):
     - ExpoModulesCore
-  - expo-dev-client (4.0.20):
+  - expo-dev-client (4.0.24):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (4.0.22):
+  - expo-dev-launcher (4.0.26):
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 4.0.22)
+    - expo-dev-launcher/Main (= 4.0.26)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -43,7 +43,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Main (4.0.22):
+  - expo-dev-launcher/Main (4.0.26):
     - DoubleConversion
     - EXManifests
     - expo-dev-launcher/Unsafe
@@ -72,7 +72,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Unsafe (4.0.22):
+  - expo-dev-launcher/Unsafe (4.0.26):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu
@@ -100,10 +100,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu (5.0.16):
+  - expo-dev-menu (5.0.20):
     - DoubleConversion
-    - expo-dev-menu/Main (= 5.0.16)
-    - expo-dev-menu/ReactNativeCompatibles (= 5.0.16)
+    - expo-dev-menu/Main (= 5.0.20)
+    - expo-dev-menu/ReactNativeCompatibles (= 5.0.20)
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.01.01.00)
@@ -124,7 +124,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - expo-dev-menu-interface (1.8.3)
-  - expo-dev-menu/Main (5.0.16):
+  - expo-dev-menu/Main (5.0.20):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu-interface
@@ -150,7 +150,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/ReactNativeCompatibles (5.0.16):
+  - expo-dev-menu/ReactNativeCompatibles (5.0.20):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -171,7 +171,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/SafeAreaView (5.0.16):
+  - expo-dev-menu/SafeAreaView (5.0.20):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -193,7 +193,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/Vendored (5.0.16):
+  - expo-dev-menu/Vendored (5.0.20):
     - DoubleConversion
     - expo-dev-menu/SafeAreaView
     - glog
@@ -221,14 +221,14 @@ PODS:
     - ExpoModulesCore
   - ExpoFont (12.0.9):
     - ExpoModulesCore
-  - ExpoHead (3.5.18):
+  - ExpoHead (3.5.23):
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
   - ExpoMediaLibrary (16.0.4):
     - ExpoModulesCore
     - React-Core
-  - ExpoModulesCore (1.12.19):
+  - ExpoModulesCore (1.12.22):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1266,7 +1266,7 @@ PODS:
   - react-native-track-player (3.2.0):
     - React-Core
     - SwiftAudioEx (= 0.15.3)
-  - react-native-unistyles (2.9.0):
+  - react-native-unistyles (2.9.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1586,16 +1586,16 @@ PODS:
     - Yoga
   - SocketRocket (0.7.0)
   - SwiftAudioEx (0.15.3)
-  - VisionCamera (4.5.1):
-    - VisionCamera/Core (= 4.5.1)
-    - VisionCamera/FrameProcessors (= 4.5.1)
-    - VisionCamera/React (= 4.5.1)
-  - VisionCamera/Core (4.5.1)
-  - VisionCamera/FrameProcessors (4.5.1):
+  - VisionCamera (4.5.2):
+    - VisionCamera/Core (= 4.5.2)
+    - VisionCamera/FrameProcessors (= 4.5.2)
+    - VisionCamera/React (= 4.5.2)
+  - VisionCamera/Core (4.5.2)
+  - VisionCamera/FrameProcessors (4.5.2):
     - React
     - React-callinvoker
     - react-native-worklets-core
-  - VisionCamera/React (4.5.1):
+  - VisionCamera/React (4.5.2):
     - React-Core
     - VisionCamera/FrameProcessors
   - Yoga (0.0.0)
@@ -1869,18 +1869,18 @@ SPEC CHECKSUMS:
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
-  Expo: 8b7948e45627e848c2d7b6be7cf5851a505aef19
-  expo-dev-client: d24806e84d072563b0a26537c22ec902443e77d6
-  expo-dev-launcher: 9ec4a77189b7ba5340c26399885887bec84e71f2
-  expo-dev-menu: 02f7aa39ee32f4730815cb5fe0c38d7bfda76ab7
+  Expo: 61b2953ad6afa979729f639c5992c182e8eb9040
+  expo-dev-client: 44e9bb8afbf444bc380c606475030fe8929de203
+  expo-dev-launcher: 34da84397348512e8080bb74bb3517eb53606dc9
+  expo-dev-menu: a54fc1d8294172cb90b07ad0c4ba674058cc5cab
   expo-dev-menu-interface: be32c09f1e03833050f0ee290dcc86b3ad0e73e4
   ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: e7f2275c10ca8573c991e007329ad6bf98086485
-  ExpoHead: 7880300d9c1519420530cf591d333d3f96ff9f6e
+  ExpoHead: fcb28a68ed4ba28f177394d2dfb8a0a8824cd103
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoMediaLibrary: 250bf2659264163e428da5f867493b4cccd35ef9
-  ExpoModulesCore: 734c1802786b23c9598f4d15273753a779969368
+  ExpoModulesCore: 3d713ef226952c6a4a36a0f4501a328baba84a90
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
   EXSplashScreen: fbf0ec78e9cee911df188bf17b4fe51d15a84b87
@@ -1919,7 +1919,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-skia: 4008bb2e4923ead4b8be7d17326840ba9c8b46f4
   react-native-track-player: 0c26d981b5097910486cbbeb6d8f5352d41be069
-  react-native-unistyles: a36bb974db121ec16e129b7991a51f04fa1bd7f8
+  react-native-unistyles: b0584a78fc6c839726e851d0c77aa659f80ef14d
   react-native-worklets-core: f51430dd07bf5343d4918d28a4bb00fe8f98b982
   React-nativeconfig: fa5de9d8f4dbd5917358f8ad3ad1e08762f01dcb
   React-NativeModulesApple: 585d1b78e0597de364d259cb56007052d0bda5e5
@@ -1949,7 +1949,7 @@ SPEC CHECKSUMS:
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SwiftAudioEx: 83eabba2940924fc1c0d5cb0896049921365229c
-  VisionCamera: b0bf2df4e845825f03e04c025c9b8283a9c61bf7
+  VisionCamera: 057aff621f7801b7d99a00d157fa39244bbd4fd2
   Yoga: 88480008ccacea6301ff7bf58726e27a72931c8d
 
 PODFILE CHECKSUM: d968e2a89aa56f95e0606b09d3e1f56b61594a3a
