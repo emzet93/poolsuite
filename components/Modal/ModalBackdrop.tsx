@@ -6,26 +6,26 @@ const { width, height } = UnistylesRuntime.screen;
 
 const frames = [
   {
-    verticalLineWidth: 5,
-    horizontalLineWidth: 2,
-    verticalSpacing: 2,
-    horizontalSpacing: 1,
-  },
-  {
-    verticalLineWidth: 2,
-    horizontalLineWidth: 5,
-    verticalSpacing: 2,
-    horizontalSpacing: 1,
-  },
-  {
-    verticalLineWidth: 2,
-    horizontalLineWidth: 1,
+    verticalLineWidth: 0.3,
+    horizontalLineWidth: 0.3,
     verticalSpacing: 1,
-    horizontalSpacing: 2,
+    horizontalSpacing: 1,
   },
   {
-    verticalLineWidth: 2,
-    horizontalLineWidth: 1,
+    verticalLineWidth: 0.5,
+    horizontalLineWidth: 0.5,
+    verticalSpacing: 1,
+    horizontalSpacing: 1,
+  },
+  {
+    verticalLineWidth: 0.75,
+    horizontalLineWidth: 0.5,
+    verticalSpacing: 1,
+    horizontalSpacing: 1,
+  },
+  {
+    verticalLineWidth: 0.5,
+    horizontalLineWidth: 0.75,
     verticalSpacing: 1,
     horizontalSpacing: 1,
   },
@@ -55,7 +55,7 @@ export const ModalBackdrop: FC = React.memo(() => {
         index += 1;
         return frames[index];
       });
-    }, 100);
+    }, 50);
 
     return () => {
       clearInterval(id);

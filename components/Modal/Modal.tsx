@@ -1,8 +1,6 @@
 import React, { FC, ReactNode, useState } from "react";
 import { Modal as RNModal, Pressable, View } from "react-native";
 import Animated, {
-  FadeIn,
-  FadeOut,
   runOnJS,
   SlideInDown,
   SlideOutDown,
@@ -42,8 +40,6 @@ export const Modal: FC<ModalProps> = ({ isOpen, children, onClose }) => {
         <>
           <View style={styles.container}>
             <AnimatedPressable
-              entering={FadeIn.duration(500)}
-              exiting={FadeOut}
               style={styles.backdropContainer}
               onPress={onClose}
             >
