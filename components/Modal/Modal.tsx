@@ -10,6 +10,7 @@ import Animated, {
 import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
+import { ModalBackdrop } from "@/components/Modal/ModalBackdrop";
 
 import { stylesheet } from "./Modal.style";
 
@@ -42,18 +43,18 @@ export const Modal: FC<ModalProps> = ({ isOpen, children, onClose }) => {
           <View style={styles.container}>
             <AnimatedPressable
               entering={FadeIn.duration(500)}
-              exiting={FadeOut.withCallback(() => {
-                runOnJS(setIsModalVisible)(false);
-              })}
+              exiting={FadeOut}
               style={styles.backdropContainer}
               onPress={onClose}
             >
-              <View style={styles.backdrop} />
+              <ModalBackdrop />
             </AnimatedPressable>
 
             <Animated.View
               entering={SlideInDown.duration(500)}
-              exiting={SlideOutDown}
+              exiting={SlideOutDown.withCallback(() => {
+                runOnJS(setIsModalVisible)(false);
+              })}
             >
               <Card style={styles.modal} shadowSize="big">
                 {children}

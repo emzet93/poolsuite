@@ -11,11 +11,6 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
   backdropContainer: {
     ...StyleSheet.absoluteFillObject,
   },
-  backdrop: {
-    flex: 1,
-    backgroundColor: theme.colors.primary,
-    opacity: 0.65,
-  },
   modal: {},
   content: {},
 }));
