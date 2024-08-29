@@ -16,7 +16,7 @@ import {
 } from "@/components/Waveform/utils";
 
 interface IProps {
-  waveformUrl: string;
+  waveformUrl: string | undefined;
   progress: number;
   duration: number;
 }
@@ -46,6 +46,11 @@ export const Waveform: FC<IProps> = React.memo(
     }
 
     useEffect(() => {
+      if (!waveformUrl) {
+        runOnUI(drawWaveform)(waveformImage, placeholderData);
+        return;
+      }
+
       let isCancelled = false;
 
       axios

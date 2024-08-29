@@ -7,6 +7,7 @@ import {
 } from "@shopify/react-native-skia";
 import { FC } from "react";
 import { SharedValue } from "react-native-reanimated";
+import { useStyles } from "react-native-unistyles";
 
 import { useThemeUniforms } from "../ImageFilters";
 import { ditheringShader } from "@/components/DitheredImage/utils";
@@ -19,9 +20,10 @@ interface IProps {
 
 export const DitheredImage: FC<IProps> = ({ width, height, image }) => {
   const uniforms = useThemeUniforms();
+  const { theme } = useStyles();
 
   return (
-    <Canvas style={{ flex: 1 }}>
+    <Canvas style={{ flex: 1, backgroundColor: theme.colors.primary }}>
       <Fill>
         <Shader source={ditheringShader} uniforms={uniforms}>
           <ImageShader

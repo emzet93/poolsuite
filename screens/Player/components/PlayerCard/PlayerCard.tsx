@@ -59,8 +59,8 @@ export const PlayerCard: FC<IProps> = () => {
 
   return (
     <Card shadowSize="big">
-      {queue && (
-        <View style={styles.channelInfo}>
+      <View style={styles.channelInfo}>
+        {queue && (
           <Pressable onPress={playPreviousChannel} style={styles.channelAction}>
             <Fontisto
               name="caret-left"
@@ -68,24 +68,33 @@ export const PlayerCard: FC<IProps> = () => {
               color={theme.colors.secondary}
             />
           </Pressable>
+        )}
 
-          <View style={styles.channelCardContainer}>
-            <Card
-              onPress={() => {
-                requestAnimationFrame(toggleChannelsModal);
-              }}
-              inverted
-              style={styles.channelCard}
-            >
+        <View style={styles.channelCardContainer}>
+          <Card
+            onPress={() => {
+              requestAnimationFrame(toggleChannelsModal);
+            }}
+            inverted
+            style={styles.channelCard}
+            disabled={channels.length === 0}
+          >
+            {queue ? (
               <Text size="m" weight="bold" align="center" color="secondary">
                 <Text size="l" align="center" color="secondary">
                   {"Channel: "}
                 </Text>
                 {queue.channel?.name}
               </Text>
-            </Card>
-          </View>
+            ) : (
+              <Text size="l" align="center" color="secondary">
+                Loading channels...
+              </Text>
+            )}
+          </Card>
+        </View>
 
+        {queue && (
           <Pressable onPress={playNextChannel} style={styles.channelAction}>
             <Fontisto
               name="caret-right"
@@ -93,74 +102,75 @@ export const PlayerCard: FC<IProps> = () => {
               color={theme.colors.secondary}
             />
           </Pressable>
-        </View>
-      )}
-      {currentTrack && (
-        <Waveform
-          waveformUrl={currentTrack.waveformUrl}
-          progress={progress}
-          duration={currentTrack.durationMs / 1000}
-        />
-      )}
+        )}
+      </View>
+
+      <Waveform
+        waveformUrl={currentTrack?.waveformUrl}
+        progress={progress}
+        duration={(currentTrack?.durationMs || 1000) / 1000}
+      />
 
       <Lines style={styles.lines} />
 
-      {currentTrack && (
-        <View style={styles.content}>
-          <View style={styles.playerInfo}>
+      <View style={styles.content}>
+        <View style={styles.playerInfo}>
+          {currentTrack ? (
             <Text size="l">
               {`${formatDuration(progress)}  /  ${formatDuration(currentTrack?.durationMs / 1000)}`}
             </Text>
+          ) : (
+            <Text size="l"> --:-- / --:--</Text>
+          )}
 
-            <Text align="center" size="m" weight="bold" numberOfLines={1}>
-              {currentTrack.title}
-            </Text>
+          <Text align="center" size="m" weight="bold" numberOfLines={1}>
+            {currentTrack?.title || "-"}
+          </Text>
 
-            <Text align="center" size="l">
-              {currentTrack.artist}
-            </Text>
-          </View>
-
-          <View style={styles.playerControls}>
-            <Card
-              containerStyle={styles.controlContainer}
-              style={[styles.control, styles.leftControl]}
-              onPress={playPrevious}
-            >
-              <Fontisto
-                name="step-backwrad"
-                size={ControlArrowSize}
-                color={theme.colors.primary}
-              />
-            </Card>
-            <Card
-              containerStyle={[
-                styles.controlContainer,
-                styles.middleControlContainer,
-              ]}
-              style={[styles.control, styles.middleControl]}
-              onPress={togglePlay}
-            >
-              <Fontisto
-                name={isPlaying ? "pause" : "play"}
-                size={ControlArrowSize}
-                color={theme.colors.primary}
-              />
-            </Card>
-            <Card
-              containerStyle={styles.controlContainer}
-              style={[styles.control, styles.rightControl]}
-              onPress={() => playNext()}
-            >
-              <Fontisto
-                name="step-forward"
-                size={ControlArrowSize}
-                color={theme.colors.primary}
-              />
-            </Card>
-          </View>
+          <Text align="center" size="l">
+            {currentTrack?.artist || "-"}
+          </Text>
         </View>
-      )}
+
+        <View style={styles.playerControls}>
+          <Card
+            containerStyle={styles.controlContainer}
+            style={[styles.control, styles.leftControl]}
+            onPress={playPrevious}
+          >
+            <Fontisto
+              name="step-backwrad"
+              size={ControlArrowSize}
+              color={theme.colors.primary}
+            />
+          </Card>
+          <Card
+            containerStyle={[
+              styles.controlContainer,
+              styles.middleControlContainer,
+            ]}
+            style={[styles.control, styles.middleControl]}
+            onPress={togglePlay}
+          >
+            <Fontisto
+              name={isPlaying ? "pause" : "play"}
+              size={ControlArrowSize}
+              color={theme.colors.primary}
+            />
+          </Card>
+          <Card
+            containerStyle={styles.controlContainer}
+            style={[styles.control, styles.rightControl]}
+            onPress={() => playNext()}
+          >
+            <Fontisto
+              name="step-forward"
+              size={ControlArrowSize}
+              color={theme.colors.primary}
+            />
+          </Card>
+        </View>
+      </View>
 
       <Noise style={styles.noise} density={0.18} frequency={0.5} />
 
