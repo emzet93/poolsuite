@@ -1,6 +1,7 @@
 import { createStyleSheet } from "react-native-unistyles";
 
 export const PlayerBarHeight = 50;
+export const PlayIconSize = 8;
 
 export const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
@@ -9,19 +10,27 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     right: 0,
     bottom: 0,
     backgroundColor: theme.colors.secondary,
-    paddingBottom: runtime.insets.bottom,
     borderTopWidth: 1,
     borderColor: theme.colors.primary,
   },
   player: {
     height: PlayerBarHeight,
-    padding: theme.spacing.s,
     flexDirection: "row",
-    alignItems: "center",
     gap: theme.spacing.s,
   },
   trackInfo: {
+    justifyContent: "center",
+    paddingLeft: theme.spacing.xs,
     flex: 1,
     gap: theme.spacing.xxs,
+  },
+  playButton: {
+    height: PlayerBarHeight,
+    width: theme.spacing.xxl,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bottomSafeArea: {
+    height: runtime.insets.bottom,
   },
 }));
