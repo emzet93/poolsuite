@@ -5,6 +5,7 @@ import Animated from "react-native-reanimated";
 import { useStyles } from "react-native-unistyles";
 
 import { Noise } from "@/components/Noise";
+import { SlidingText } from "@/components/SlidingText";
 import { Text } from "@/components/Text";
 import {
   selectActiveTrack,
@@ -32,8 +33,16 @@ export const PlayerBar: FC<IProps> = ({ onPress, style }) => {
     <AnimatedPressable style={[styles.container, style]} onPress={onPress}>
       <View style={styles.player}>
         <View style={styles.trackInfo}>
-          <Text weight="bold">{currentTrack?.title || "-"}</Text>
-          <Text>{currentTrack?.artist || "-"}</Text>
+          <SlidingText
+            key={currentTrack?.title}
+            weight="bold"
+            style={styles.text}
+          >
+            {currentTrack?.title || "-"}
+          </SlidingText>
+          <Text numberOfLines={1} style={styles.text}>
+            {currentTrack?.artist || "-"}
+          </Text>
         </View>
 
         <Pressable onPress={togglePlay} style={styles.playButton}>

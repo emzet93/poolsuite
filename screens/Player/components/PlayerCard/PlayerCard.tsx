@@ -7,6 +7,7 @@ import { Card } from "@/components/Card";
 import { Lines } from "@/components/Lines";
 import { Modal } from "@/components/Modal";
 import { Noise } from "@/components/Noise";
+import { SlidingText } from "@/components/SlidingText";
 import { Text } from "@/components/Text";
 import { Waveform } from "@/components/Waveform";
 import { ChannelsList } from "@/screens/Player/components/ChannelsList";
@@ -123,11 +124,16 @@ export const PlayerCard: FC<IProps> = () => {
             <Text size="l"> --:-- / --:--</Text>
           )}
 
-          <Text align="center" size="m" weight="bold" numberOfLines={1}>
+          <SlidingText
+            key={currentTrack?.title}
+            align="center"
+            size="m"
+            weight="bold"
+          >
             {currentTrack?.title || "-"}
-          </Text>
+          </SlidingText>
 
-          <Text align="center" size="l">
+          <Text align="center" size="l" numberOfLines={1}>
             {currentTrack?.artist || "-"}
           </Text>
         </View>

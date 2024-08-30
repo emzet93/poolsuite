@@ -6,7 +6,7 @@ import { Theme } from "@/theme/types";
 
 import { stylesheet, textSize, fontWeight } from "./Text.style";
 
-interface TextProps extends RNTextProps {
+export interface TextProps extends RNTextProps {
   color?: keyof Theme["colors"];
   size?: keyof typeof textSize;
   weight?: keyof typeof fontWeight;

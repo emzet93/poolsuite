@@ -16,13 +16,14 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
   player: {
     height: PlayerBarHeight,
     flexDirection: "row",
-    gap: theme.spacing.s,
   },
   trackInfo: {
     justifyContent: "center",
-    paddingLeft: theme.spacing.xs,
     flex: 1,
-    gap: theme.spacing.xxs,
+    gap: theme.spacing.xxs / 2,
+  },
+  text: {
+    paddingLeft: theme.spacing.xs,
   },
   playButton: {
     height: PlayerBarHeight,
