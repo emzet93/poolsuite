@@ -1,13 +1,11 @@
 import React, { FC } from "react";
-import { StyleProp, View } from "react-native";
-import { useStyles } from "react-native-unistyles";
+import { StyleProp, StyleSheet, View } from "react-native";
+import { UnistylesRuntime, useStyles } from "react-native-unistyles";
 
-interface IProps {
+export const Lines: FC<{
   count?: number;
   style?: StyleProp<any>;
-}
-
-export const Lines: FC<IProps> = React.memo(({ count = 4, style }) => {
+}> = React.memo(({ count = 4, style }) => {
   const { theme } = useStyles();
 
   return (
@@ -18,6 +16,35 @@ export const Lines: FC<IProps> = React.memo(({ count = 4, style }) => {
           style={{
             width: "100%",
             height: 1,
+            backgroundColor: theme.colors.primary,
+          }}
+        />
+      ))}
+    </View>
+  );
+});
+
+export const BackgroundLines: FC<{
+  style?: StyleProp<any>;
+}> = React.memo(({ style }) => {
+  const { theme } = useStyles();
+  const gap = theme.spacing.xxs;
+  const stroke = 1;
+  const count = Math.ceil(UnistylesRuntime.screen.width / (stroke + gap));
+
+  return (
+    <View
+      style={[
+        { ...StyleSheet.absoluteFillObject, gap, flexDirection: "row" },
+        style,
+      ]}
+    >
+      {new Array(count).fill(0).map((_, index) => (
+        <View
+          key={index}
+          style={{
+            height: "100%",
+            width: stroke,
             backgroundColor: theme.colors.primary,
           }}
         />

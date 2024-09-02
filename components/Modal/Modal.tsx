@@ -52,9 +52,7 @@ export const Modal: FC<ModalProps> = ({ isOpen, children, onClose }) => {
                 runOnJS(setIsModalVisible)(false);
               })}
             >
-              <Card style={styles.modal} shadowSize="big">
-                {children}
-              </Card>
+              <Card shadowSize="big">{children}</Card>
             </Animated.View>
           </View>
         </>

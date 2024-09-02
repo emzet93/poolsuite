@@ -6,11 +6,9 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     flex: 1,
     justifyContent: "flex-end",
     padding: theme.spacing.xs,
-    paddingBottom: theme.spacing.xs + runtime.insets.bottom,
+    paddingBottom: runtime.insets.bottom + theme.spacing.xs,
   },
   backdropContainer: {
     ...StyleSheet.absoluteFillObject,
   },
-  modal: {},
-  content: {},
 }));

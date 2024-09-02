@@ -1,1 +1,1 @@
-export { Lines } from "./Lines";
+export { Lines, BackgroundLines } from "./Lines";
