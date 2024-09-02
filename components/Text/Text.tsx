@@ -1,17 +1,23 @@
 import React, { FC } from "react";
-import { TextProps as RNTextProps, Text as RNText } from "react-native";
+import { TextProps as RNTextProps } from "react-native";
 import { useStyles } from "react-native-unistyles";
 
 import { Theme } from "@/theme/types";
 
 import { stylesheet, textSize, fontWeight } from "./Text.style";
 
-export interface TextProps extends RNTextProps {
+export interface TextProps
+  extends Omit<
+    RNTextProps,
+    "onPress" | "onPressIn" | "onPressOut" | "onLongPress"
+  > {
   color?: keyof Theme["colors"];
   size?: keyof typeof textSize;
   weight?: keyof typeof fontWeight;
   align?: "auto" | "left" | "center" | "right";
 }
+
+const RawText = (props: RNTextProps) => React.createElement("RCTText", props);
 
 export const Text: FC<TextProps> = ({
   style,
@@ -24,7 +30,7 @@ export const Text: FC<TextProps> = ({
   const { styles } = useStyles(stylesheet);
 
   return (
-    <RNText
+    <RawText
       {...props}
       style={[styles.text(color, size, weight), style, { textAlign: align }]}
     />
