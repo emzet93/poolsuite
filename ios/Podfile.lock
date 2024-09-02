@@ -1266,7 +1266,7 @@ PODS:
   - react-native-track-player (3.2.0):
     - React-Core
     - SwiftAudioEx (= 0.15.3)
-  - react-native-unistyles (2.9.1):
+  - react-native-unistyles (2.9.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1919,7 +1919,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-skia: 4008bb2e4923ead4b8be7d17326840ba9c8b46f4
   react-native-track-player: 0c26d981b5097910486cbbeb6d8f5352d41be069
-  react-native-unistyles: b0584a78fc6c839726e851d0c77aa659f80ef14d
+  react-native-unistyles: 29c3d5bea36be141b645dd759b4540caa0e70dbf
   react-native-worklets-core: f51430dd07bf5343d4918d28a4bb00fe8f98b982
   React-nativeconfig: fa5de9d8f4dbd5917358f8ad3ad1e08762f01dcb
   React-NativeModulesApple: 585d1b78e0597de364d259cb56007052d0bda5e5

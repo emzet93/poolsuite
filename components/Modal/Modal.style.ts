@@ -6,7 +6,10 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     flex: 1,
     justifyContent: "flex-end",
     padding: theme.spacing.xs,
-    paddingBottom: runtime.insets.bottom + theme.spacing.xs,
+    paddingBottom: Math.max(
+      runtime.insets.bottom - runtime.navigationBar.height + theme.spacing.xs,
+      theme.spacing.xs,
+    ),
   },
   backdropContainer: {
     ...StyleSheet.absoluteFillObject,
