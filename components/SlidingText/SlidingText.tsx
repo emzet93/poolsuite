@@ -94,6 +94,7 @@ export const SlidingText: FC<Props> = ({
         {...textProps}
         style={[textStyle, styles.textPlaceholder]}
         numberOfLines={1}
+        ellipsizeMode="clip"
       />
     </View>
   );
