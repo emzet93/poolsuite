@@ -1,6 +1,7 @@
 import React, { FC, useRef } from "react";
 import { StyleProp, View } from "react-native";
 import Animated, {
+  cancelAnimation,
   Easing,
   useAnimatedStyle,
   useSharedValue,
@@ -39,6 +40,9 @@ export const SlidingText: FC<Props> = ({
   }));
 
   const handleSliding = () => {
+    cancelAnimation(translateX);
+    translateX.value = 0;
+
     if (
       containerWidth.current &&
       textWidth.current &&
@@ -66,7 +70,6 @@ export const SlidingText: FC<Props> = ({
       style={[containerStyle, styles.container]}
       onLayout={(event) => {
         if (event.nativeEvent.layout.width !== containerWidth.current) {
-          translateX.value = 0;
           containerWidth.current = event.nativeEvent.layout.width;
           handleSliding();
         }
@@ -76,7 +79,6 @@ export const SlidingText: FC<Props> = ({
         <Text
           onLayout={(event) => {
             if (event.nativeEvent.layout.width !== textWidth.current) {
-              translateX.value = 0;
               textWidth.current = event.nativeEvent.layout.width;
               handleSliding();
             }
