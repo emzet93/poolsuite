@@ -35,7 +35,6 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   const device = useCameraDevice(cameraPosition);
   const {
     permission: cameraPermission,
-    requestPermission: requestCameraPermission,
     isRequestingPermission: isRequestingCamera,
   } = useCameraPermission();
   const [libraryPermissionError, setLibraryPermissionError] = useState(false);
@@ -47,10 +46,6 @@ export const PlayerCamera: FC<IProps> = React.memo(({ onExit }) => {
   const format = useCameraFormat(device, [
     { videoResolution: cameraResolution },
   ]);
-
-  useEffect(() => {
-    requestCameraPermission();
-  }, [requestCameraPermission]);
 
   const frameProcessor = useSkiaFrameProcessor(
     (frame) => {

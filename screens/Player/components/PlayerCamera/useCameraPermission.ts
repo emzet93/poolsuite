@@ -3,7 +3,9 @@ import { AppState } from "react-native";
 import { Camera } from "react-native-vision-camera";
 
 export const useCameraPermission = () => {
-  const [isRequestingPermission, setIsRequestingPermission] = useState(false);
+  const [isRequestingPermission, setIsRequestingPermission] = useState(
+    Camera.getCameraPermissionStatus() !== "granted",
+  );
   const [permission, setPermission] = useState(() =>
     Camera.getCameraPermissionStatus(),
   );
@@ -18,6 +20,11 @@ export const useCameraPermission = () => {
     setPermission(newPermission);
     setIsRequestingPermission(false);
   }, []);
+
+  useEffect(() => {
+    // Request permission on camera mount
+    requestPermission();
+  }, [requestPermission]);
 
   useEffect(() => {
     // Refresh permission when app state changes, as user might have allowed it in Settings
