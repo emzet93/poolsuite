@@ -48,7 +48,7 @@ export default function RootLayout() {
 
   return (
     <>
-      <StatusBar hidden={Platform.OS === "ios"} />
+      <StatusBar hidden />
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>

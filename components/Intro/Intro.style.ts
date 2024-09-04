@@ -1,10 +1,13 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
 
-export const stylesheet = createStyleSheet((theme) => ({
+export const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
     ...StyleSheet.absoluteFillObject,
-    flex: 1,
+    bottom: Platform.select({
+      ios: 0,
+      android: runtime.navigationBar.height,
+    }),
     backgroundColor: theme.colors.secondary,
   },
   content: {

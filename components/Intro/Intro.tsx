@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { Pressable, View } from "react-native";
 import Animated, { FadeIn, runOnJS } from "react-native-reanimated";
 import { useStyles } from "react-native-unistyles";
@@ -23,14 +23,14 @@ export const Intro: FC<Props> = ({ close }) => {
     <Pressable onPress={close} style={styles.container}>
       <Lines count={20} />
       <View style={styles.content}>
-        <Animated.View entering={FadeIn.duration(1500)}>
+        <Animated.View entering={FadeIn.duration(2500)}>
           <Text weight="bold" size="xl">
             Poolsuite
           </Text>
         </Animated.View>
         <Animated.View
-          entering={FadeIn.delay(1000)
-            .duration(1500)
+          entering={FadeIn.delay(2000)
+            .duration(2500)
             .withCallback((finished) => {
               if (finished) {
                 runOnJS(delayedClose)();
