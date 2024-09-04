@@ -19,6 +19,8 @@ export const TrackPlayer: TrackPlayerService = {
         title: track.title,
         artist: track.artist,
         duration: track.durationMs / 1000,
+        artwork: require("@/assets/images/icon.png"),
+        album: "Poolsuite",
       })),
     );
   },
