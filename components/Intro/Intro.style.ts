@@ -1,6 +1,8 @@
 import { Platform, StyleSheet } from "react-native";
 import { createStyleSheet } from "react-native-unistyles";
 
+import { LogoAspectRatio } from "@/components/Logo";
+
 export const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -15,6 +17,9 @@ export const stylesheet = createStyleSheet((theme, runtime) => ({
     padding: theme.spacing.s,
     justifyContent: "center",
     alignItems: "center",
-    gap: theme.spacing.xs,
+  },
+  logo: {
+    width: "80%",
+    aspectRatio: LogoAspectRatio,
   },
 }));

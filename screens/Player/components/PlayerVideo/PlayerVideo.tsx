@@ -4,6 +4,7 @@ import { useStyles } from "react-native-unistyles";
 
 import { Card } from "@/components/Card";
 import { DitheredImage } from "@/components/DitheredImage";
+import { Logo } from "@/components/Logo";
 import { Text } from "@/components/Text";
 import { useDimensions } from "@/hooks/useDimensions";
 import { useVideoFromAsset } from "@/hooks/useVideoFromAsset";
@@ -26,6 +27,9 @@ export const PlayerVideo: FC<IProps> = React.memo(({ openCamera }) => {
   return (
     <View style={styles.container} onLayout={onLayout}>
       <DitheredImage image={currentFrame} width={width} height={height} />
+      <View style={styles.logo}>
+        <Logo />
+      </View>
       <View style={styles.buttonsContainer}>
         <Card style={styles.button} onPress={openCamera}>
           <Text size="m" weight="bold">

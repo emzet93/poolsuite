@@ -4,6 +4,7 @@ import Animated, { FadeIn, runOnJS } from "react-native-reanimated";
 import { useStyles } from "react-native-unistyles";
 
 import { Lines } from "@/components/Lines";
+import { Logo } from "@/components/Logo";
 import { Text } from "@/components/Text";
 
 import { stylesheet } from "./Intro.style";
@@ -23,17 +24,15 @@ export const Intro: FC<Props> = ({ close }) => {
     <Pressable onPress={close} style={styles.container}>
       <Lines count={20} />
       <View style={styles.content}>
-        <Animated.View entering={FadeIn.duration(2500)}>
-          <Text weight="bold" size="xl">
-            Poolsuite
-          </Text>
+        <Animated.View entering={FadeIn.duration(2500)} style={styles.logo}>
+          <Logo inverted />
         </Animated.View>
         <Animated.View
           entering={FadeIn.delay(2000)
             .duration(2500)
             .withCallback((finished) => {
               if (finished) {
-                runOnJS(delayedClose)();
+                // runOnJS(delayedClose)();
               }
             })}
         >

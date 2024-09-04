@@ -7,6 +7,15 @@ export const stylesheet = createStyleSheet((theme) => ({
   camera: {
     flex: 1,
   },
+  logo: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: "15%",
+    right: "15%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   buttonsContainer: {
     position: "absolute",
     right: theme.spacing.xs,
