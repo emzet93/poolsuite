@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
-import { Platform, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 
 import { Intro } from "@/components/Intro";
 import { initLibrary } from "@/store/library";
@@ -15,7 +15,6 @@ import { setupThemes } from "@/theme";
 setupThemes();
 initializePlayer();
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

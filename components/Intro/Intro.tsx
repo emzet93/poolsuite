@@ -32,7 +32,7 @@ export const Intro: FC<Props> = ({ close }) => {
             .duration(2500)
             .withCallback((finished) => {
               if (finished) {
-                // runOnJS(delayedClose)();
+                runOnJS(delayedClose)();
               }
             })}
         >
