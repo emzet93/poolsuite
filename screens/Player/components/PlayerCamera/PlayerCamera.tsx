@@ -1,7 +1,7 @@
 import { makeImageFromView } from "@shopify/react-native-skia";
 import * as FileSystem from "expo-file-system";
 import { createAssetAsync, requestPermissionsAsync } from "expo-media-library";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { View } from "react-native";
 import { useStyles } from "react-native-unistyles";
 import {

@@ -1,14 +1,15 @@
 import { createStyleSheet } from "react-native-unistyles";
 
 import { Theme } from "@/theme/types";
+import { normalizeSize } from "@/utils/ui";
 
 export const textSize = {
-  xs: 10,
-  s: 12,
-  m: 14,
-  l: 18,
-  xl: 24,
-  xxl: 32,
+  xs: normalizeSize(10),
+  s: normalizeSize(12),
+  m: normalizeSize(14),
+  l: normalizeSize(18),
+  xl: normalizeSize(24),
+  xxl: normalizeSize(32),
 };
 
 export const fontWeight = {

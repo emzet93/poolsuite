@@ -1,5 +1,9 @@
 import { createStyleSheet } from "react-native-unistyles";
 
+import { normalizeSize } from "@/utils/ui";
+
+export const CloseIconSize = normalizeSize(10);
+
 export const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
     backgroundColor: theme.colors.primary,

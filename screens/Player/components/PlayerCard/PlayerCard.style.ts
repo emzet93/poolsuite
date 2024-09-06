@@ -1,6 +1,8 @@
 import { createStyleSheet } from "react-native-unistyles";
 
-export const ControlArrowSize = 8;
+import { normalizeSize } from "@/utils/ui";
+
+export const ControlArrowSize = normalizeSize(8);
 
 export const stylesheet = createStyleSheet((theme) => ({
   channelInfo: {

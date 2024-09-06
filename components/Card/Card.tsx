@@ -40,7 +40,7 @@ export const Card: FC<Props> = ({
     return {
       transform: [{ translateX: translation }, { translateY: translation }],
     };
-  }, [shadowSize]);
+  });
 
   return (
     <Pressable

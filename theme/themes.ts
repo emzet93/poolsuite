@@ -1,13 +1,14 @@
-import { AppThemes, Theme } from "@/theme/types";
+import { AppThemes } from "@/theme/types";
+import { normalizeSize } from "@/utils/ui";
 
 export const defaultSpacing = {
-  xxs: 4,
-  xs: 8,
-  s: 16,
-  m: 20,
-  l: 24,
-  xl: 32,
-  xxl: 40,
+  xxs: normalizeSize(4),
+  xs: normalizeSize(8),
+  s: normalizeSize(16),
+  m: normalizeSize(20),
+  l: normalizeSize(24),
+  xl: normalizeSize(32),
+  xxl: normalizeSize(40),
 };
 
 export const defaultCardStyle = {

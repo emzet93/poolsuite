@@ -1,1 +1,1 @@
-export { DitheredImage, ditheredImagePaint } from "./DitheredImage";
+export { DitheredImage } from "./DitheredImage";

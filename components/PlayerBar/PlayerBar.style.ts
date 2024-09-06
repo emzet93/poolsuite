@@ -1,7 +1,9 @@
 import { createStyleSheet } from "react-native-unistyles";
 
-export const PlayerBarHeight = 50;
-export const PlayIconSize = 8;
+import { normalizeSize } from "@/utils/ui";
+
+export const PlayerBarHeight = normalizeSize(50);
+export const PlayIconSize = normalizeSize(8);
 
 export const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {

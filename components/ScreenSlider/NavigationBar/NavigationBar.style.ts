@@ -1,7 +1,9 @@
 import { createStyleSheet } from "react-native-unistyles";
 
-export const NavigationBarHeight = 36;
-export const ArrowSize = 16;
+import { normalizeSize } from "@/utils/ui";
+
+export const NavigationBarHeight = normalizeSize(36);
+export const ArrowSize = normalizeSize(16);
 export const ArrowOffset = ArrowSize * 2;
 
 export const stylesheet = createStyleSheet((theme, runtime) => ({
